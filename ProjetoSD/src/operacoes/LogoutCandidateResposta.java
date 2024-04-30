@@ -15,5 +15,4 @@ public class LogoutCandidateResposta extends Resposta{
 	public LogoutCandidateResposta(Operacoes operation, Status status) {
 		super(operation, status);
 	}
-
 }

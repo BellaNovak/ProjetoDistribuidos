@@ -73,7 +73,6 @@ public class Servidor extends Thread {
 	public void run() {
 		
 		System.out.println("Novo cliente conectado " + cliente.getInetAddress().getHostAddress() + " na " + cliente.getPort() + " porta");
-		//System.out.println("New thread started");
 
 		try (
 				cliente;

@@ -9,7 +9,6 @@ import java.util.List;
 
 import entities.Candidate;
 
-
 public class CandidateDAO {
 	
 	private Connection conn;

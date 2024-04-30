@@ -6,7 +6,6 @@ import enumerations.Operacoes;
 import enumerations.Status;
 import lombok.Getter;
 
-
 public class LookUpCandidateResposta extends Resposta{
 	
 	@Getter

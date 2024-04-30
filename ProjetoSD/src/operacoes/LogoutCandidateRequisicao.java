@@ -5,7 +5,6 @@ import java.util.TreeMap;
 import enumerations.Operacoes;
 import lombok.Getter;
 
-
 public class LogoutCandidateRequisicao extends Requisicao{
 	
 	@Getter
@@ -14,5 +13,4 @@ public class LogoutCandidateRequisicao extends Requisicao{
 	public LogoutCandidateRequisicao(Operacoes operation, String token) {
 		super(operation, token);
 	}
-
 }

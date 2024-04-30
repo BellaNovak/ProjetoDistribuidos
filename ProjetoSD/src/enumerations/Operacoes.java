@@ -8,4 +8,5 @@ public enum Operacoes {
     LOOKUP_ACCOUNT_CANDIDATE,
     UPDATE_ACCOUNT_CANDIDATE,
     DELETE_ACCOUNT_CANDIDATE,
+    
 }

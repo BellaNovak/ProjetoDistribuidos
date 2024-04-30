@@ -7,7 +7,6 @@ import java.util.List;
 
 import entities.Candidate;
 
-
 public class CandidateDAOTeste {
 	
 	public static void cadastrarCandidateTeste() throws SQLException, IOException {

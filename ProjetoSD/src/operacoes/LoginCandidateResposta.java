@@ -6,7 +6,6 @@ import enumerations.Operacoes;
 import enumerations.Status;
 import lombok.Getter;
 
-
 public class LoginCandidateResposta extends Resposta{
 	
 	@Getter
@@ -20,5 +19,4 @@ public class LoginCandidateResposta extends Resposta{
 	public LoginCandidateResposta(Operacoes operation, Status status) {
 		super(operation, status);
 	}
-
 }

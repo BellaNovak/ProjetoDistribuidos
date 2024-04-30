@@ -4,7 +4,6 @@ import enumerations.Operacoes;
 import lombok.Getter;
 import lombok.Setter;
 
-
 public class Requisicao {
 	
 	@Setter

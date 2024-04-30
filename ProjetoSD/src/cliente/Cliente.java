@@ -20,7 +20,6 @@ import operacoes.SignUpCandidateResposta;
 import operacoes.UpdateCandidateRequisicao;
 import operacoes.UpdateCandidateResposta;
 
-
 public class Cliente {
 	
 	public static void main(String[] args) throws IOException {
@@ -56,7 +55,7 @@ public class Cliente {
         String userInput;
         Gson gson = new GsonBuilder().create();
         
-        System.out.println("1- Login\n2- Logout\n3- SignUp\n4- LookUp\n5- Update\n6- Delete\n");
+        System.out.println("1- Login\n2- Logout\n3- SignUp\n4- LookUp\n5- Update\n6- Delete\n7- Finalizar\n");
         System.out.print("Digite a opcao: ");
 
         while ((userInput = stdIn.readLine()) != null) {
