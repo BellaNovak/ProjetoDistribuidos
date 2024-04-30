@@ -6,7 +6,19 @@ import java.net.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import modelo.Mensagem;
+import enumerations.Status;
+import operacoes.DeleteCandidateRequisicao;
+import operacoes.DeleteCandidateResposta;
+import operacoes.LoginCandidateRequisicao;
+import operacoes.LoginCandidateResposta;
+import operacoes.LogoutCandidateRequisicao;
+import operacoes.LookUpCandidateRequisicao;
+import operacoes.LookUpCandidateResposta;
+import operacoes.Requisicao;
+import operacoes.SignUpCandidateRequisicao;
+import operacoes.SignUpCandidateResposta;
+import operacoes.UpdateCandidateRequisicao;
+import operacoes.UpdateCandidateResposta;
 
 
 public class Servidor extends Thread {
@@ -72,13 +84,86 @@ public class Servidor extends Thread {
 			while ((inputLine = in.readLine()) != null) {
 				
 				String json = inputLine;
-				System.out.println(json);
-				Mensagem mensagemRecebida = gson.fromJson(json, Mensagem.class);
+				///System.out.println(json);
+				Requisicao mensagemRecebida = gson.fromJson(json, Requisicao.class);
+				
+				switch(mensagemRecebida.getOperation()) {
+					
+					case LOGIN_CANDIDATE: 
+						
+						LoginCandidateRequisicao login = gson.fromJson(json, LoginCandidateRequisicao.class);
+						LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.SUCCESS, "DISTRIBUIDOS");
+						String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
+						System.out.println(jsonResposta1);
+						out.println(jsonResposta1);
+						
+					break;
+				
+					case LOGOUT_CANDIDATE:
+						
+						LogoutCandidateRequisicao logout = gson.fromJson(json,  LogoutCandidateRequisicao.class);
+						LoginCandidateResposta mensagemLogoutEnviada = new LoginCandidateResposta(logout.getOperation(), Status.SUCCESS);
+						String jsonResposta2 = gson.toJson(mensagemLogoutEnviada);
+						System.out.println(jsonResposta2);
+						out.println(jsonResposta2);
+						
+					
+					break;
+					
+					case SIGNUP_CANDIDATE:
+						
+						SignUpCandidateRequisicao signUp = gson.fromJson(json, SignUpCandidateRequisicao.class);
+						SignUpCandidateResposta mensagemSignUpEnviada = new SignUpCandidateResposta(signUp.getOperation(), Status.SUCCESS);
+						String jsonResposta3 = gson.toJson(mensagemSignUpEnviada);
+						System.out.println(jsonResposta3);
+						out.println(jsonResposta3);
+						
+					break;
+					
+					case LOOKUP_ACCOUNT_CANDIDATE:
+						
+						LookUpCandidateRequisicao lookUp = gson.fromJson(json, LookUpCandidateRequisicao.class);
+						LookUpCandidateResposta mensagemLookUpEnviada = new LookUpCandidateResposta(lookUp.getOperation(), Status.SUCCESS, "bella", "123", "Isabella");
+						String jsonResposta4 = gson.toJson(mensagemLookUpEnviada);
+						System.out.println(jsonResposta4);
+						out.println(jsonResposta4);
+						
+					break;
+					
+					case UPDATE_ACCOUNT_CANDIDATE:
+						
+						UpdateCandidateRequisicao update = gson.fromJson(json, UpdateCandidateRequisicao.class);
+						UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.SUCCESS);
+						String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+						System.out.println(jsonResposta5);
+						out.println(jsonResposta5);
+						
+					break;
+					
+					case DELETE_ACCOUNT_CANDIDATE:
+						
+						DeleteCandidateRequisicao delete = gson.fromJson(json, DeleteCandidateRequisicao.class);
+						DeleteCandidateResposta mensagemDeleteEnviada = new DeleteCandidateResposta(delete.getOperation(), Status.SUCCESS);
+						String jsonResposta6 = gson.toJson(mensagemDeleteEnviada);
+						System.out.println(jsonResposta6);
+						out.println(jsonResposta6);
+						
+					break;	
+					
+					default:
+						System.out.println("ERRO");
+					break;
+					
+				}
+			
+				/*String responseMessageJson = gson.toJson(mensagemEnviada);
+				out.println(responseMessageJson);
+				
 				System.out.println(mensagemRecebida);
 				System.out.println("Message from" + cliente.getInetAddress() + ": " + mensagemRecebida.getMensagem());
 				Mensagem mensagemEnviada = new Mensagem(mensagemRecebida.getMensagem().toUpperCase());
 				String responseMessageJson = gson.toJson(mensagemEnviada);
-				out.println(responseMessageJson);
+				out.println(responseMessageJson);*/
 			}
 			
 			out.close();

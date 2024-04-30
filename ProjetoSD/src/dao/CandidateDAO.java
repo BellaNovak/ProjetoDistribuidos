@@ -9,6 +9,7 @@ import java.util.List;
 
 import entities.Candidate;
 
+
 public class CandidateDAO {
 	
 	private Connection conn;
@@ -151,5 +152,4 @@ public class CandidateDAO {
 			BancoDados.desconectar();
 		}
 	}
-
 }

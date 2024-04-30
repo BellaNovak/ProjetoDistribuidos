@@ -5,6 +5,7 @@ import enumerations.Status;
 import lombok.Getter;
 import lombok.Setter;
 
+
 public class Resposta {
 	
 	@Setter

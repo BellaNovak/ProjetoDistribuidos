@@ -4,6 +4,7 @@ import java.util.TreeMap;
 
 import enumerations.Operacoes;
 
+
 public class LoginCandidateRequisicao extends Requisicao{
 	
 	private TreeMap<String, String> data = new TreeMap<String, String>();

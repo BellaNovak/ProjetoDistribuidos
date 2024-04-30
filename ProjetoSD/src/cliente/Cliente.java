@@ -7,8 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import enumerations.Operacoes;
-import enumerations.Status;
-import modelo.Mensagem;
 import operacoes.DeleteCandidateRequisicao;
 import operacoes.DeleteCandidateResposta;
 import operacoes.LoginCandidateRequisicao;
@@ -21,6 +19,7 @@ import operacoes.SignUpCandidateRequisicao;
 import operacoes.SignUpCandidateResposta;
 import operacoes.UpdateCandidateRequisicao;
 import operacoes.UpdateCandidateResposta;
+
 
 public class Cliente {
 	
@@ -60,136 +59,128 @@ public class Cliente {
         System.out.println("1- Login\n2- Logout\n3- SignUp\n4- LookUp\n5- Update\n6- Delete\n");
         System.out.print("Digite a opcao: ");
 
-        
         while ((userInput = stdIn.readLine()) != null) {
-        	
-        	switch(userInput){
-        		case "1":
-        			System.out.print("Digite o email: ");
-                	String email1 = stdIn.readLine();
+        		
+        		switch(userInput){
+        			case "1":
+        				System.out.print("Digite o email: ");
+        				String email1 = stdIn.readLine();
                 	
-                	System.out.print("Digite a senha: ");
-                	String password1 = stdIn.readLine();
+        				System.out.print("Digite a senha: ");
+        				String password1 = stdIn.readLine();
                 	
-                	LoginCandidateRequisicao login = new LoginCandidateRequisicao(Operacoes.LOGIN_CANDIDATE, email1, password1);
-                	//LoginCandidateResposta login = new LoginCandidateResposta(Operacoes.LOGIN_CANDIDATE, Status.SUCCESS, "DISTRIBUIDOS");
-                	//LoginCandidateResposta login = new LoginCandidateResposta(Operacoes.LOGIN_CANDIDATE, Status.USER_NOT_FOUND);
+        				LoginCandidateRequisicao loginRequisicao = new LoginCandidateRequisicao(Operacoes.LOGIN_CANDIDATE, email1, password1);
                 	
-                	String json1 = gson.toJson(login);
-                    System.out.println(json1);
-                    out.println(json1);
-                    Mensagem mensagemRecebida1 = gson.fromJson(in.readLine(), Mensagem.class);
-                    System.out.println("Server: " + mensagemRecebida1.getMensagem());
-                    System.out.print ("input: ");
-                break;
+        				String jsonRequisicaoLogin = gson.toJson(loginRequisicao);
+        				System.out.println("Requisição enviada" + jsonRequisicaoLogin);
+        				out.println(jsonRequisicaoLogin);
+                    
+        				LoginCandidateResposta loginResposta = gson.fromJson(in.readLine(), LoginCandidateResposta.class);
+        				String jsonRespostaLogin = gson.toJson(loginResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaLogin);
+        				
+        				System.out.print("Nova opção: ");
+                    
+        			break;
                 
-        		case "2": 
-        			LogoutCandidateRequisicao logout = new LogoutCandidateRequisicao(Operacoes.LOGOUT_CANDIDATE, "DISTRIBUIDOS");
-        			String json2 = gson.toJson(logout);
-                    System.out.println(json2);
-                    out.println(json2);
-                    Mensagem mensagemRecebida2 = gson.fromJson(in.readLine(), Mensagem.class);
-                    System.out.println("Server: " + mensagemRecebida2.getMensagem());
-                    System.out.print ("input: ");
-                break;
+        			case "2": 
+        				LogoutCandidateRequisicao logoutRequisicao = new LogoutCandidateRequisicao(Operacoes.LOGOUT_CANDIDATE, "DISTRIBUIDOS");
+        			
+        				String jsonRequisicaoLogout = gson.toJson(logoutRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoLogout);
+        				out.println(jsonRequisicaoLogout);
+                    
+        				LogoutCandidateResposta logoutResposta = gson.fromJson(in.readLine(), LogoutCandidateResposta.class);
+        				String jsonRespostaLogout = gson.toJson(logoutResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaLogout);
+        				
+        				System.out.print("Nova opção: ");
+        			break;
                 
-        		case "3":
-        			System.out.print("Digite o email: ");
-                	String email3 = stdIn.readLine();
+        			case "3":
+        				System.out.print("Digite o email: ");
+        				String email3 = stdIn.readLine();
                 	
-                	System.out.print("Digite a senha: ");
-                	String password3 = stdIn.readLine();
+        				System.out.print("Digite a senha: ");
+        				String password3 = stdIn.readLine();
                 	
-                	System.out.print("Digite o nome: ");
-                	String name3 = stdIn.readLine();
+        				System.out.print("Digite o nome: ");
+        				String name3 = stdIn.readLine();
                 	
-        			SignUpCandidateRequisicao signUp = new SignUpCandidateRequisicao(Operacoes.SIGNUP_CANDIDATE, email3, password3, name3);
+        				SignUpCandidateRequisicao signUpRequisicao = new SignUpCandidateRequisicao(Operacoes.SIGNUP_CANDIDATE, email3, password3, name3);
         			
-        			String json3 = gson.toJson(signUp);
-                    System.out.println(json3);
-                    out.println(json3);
-                    Mensagem mensagemRecebida3 = gson.fromJson(in.readLine(), Mensagem.class);
-                    System.out.println("Server: " + mensagemRecebida3.getMensagem());
-                    System.out.print ("input: ");
-                break; 
+        				String jsonRequisicaoSignUp = gson.toJson(signUpRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoSignUp);
+        				out.println(jsonRequisicaoSignUp);
+                    
+        				SignUpCandidateResposta signUpResposta = gson.fromJson(in.readLine(), SignUpCandidateResposta.class);
+        				String jsonRespostaSignUp = gson.toJson(signUpResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaSignUp);
+        				
+        				System.out.print("Nova opção: ");
+        			break; 
                  
-        		case "4":
-        			LookUpCandidateRequisicao lookUp = new LookUpCandidateRequisicao(Operacoes.LOOKUP_ACCOUNT_CANDIDATE, "DISTRIBUIDOS");
-            		//LookUpCandidateResposta lookUp = new LookUpCandidateResposta(Operacoes.LOOKUP_ACCOUNT_CANDIDATE, Status.SUCCESS, email, password, name);
+        			case "4":
+        				LookUpCandidateRequisicao lookUpRequisicao = new LookUpCandidateRequisicao(Operacoes.LOOKUP_ACCOUNT_CANDIDATE, "DISTRIBUIDOS");
+        				
+        				String jsonRequisicaoLookUp = gson.toJson(lookUpRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoLookUp);
+        				out.println(jsonRequisicaoLookUp);
+                    
+        				LookUpCandidateResposta lookUpResposta = gson.fromJson(in.readLine(), LookUpCandidateResposta.class);
+        				String jsonRespostaLookUp = gson.toJson(lookUpResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaLookUp);
+        				
+        				System.out.print("Nova opção: ");
+        			break;
+                 
+        			case "5":
+        				System.out.print("Digite o email: ");
+        				String email5 = stdIn.readLine();
+                	
+        				System.out.print("Digite a senha: ");
+        				String password5 = stdIn.readLine();
+                	
+        				System.out.print("Digite o nome: ");
+        				String name5 = stdIn.readLine();
+                	
+        				UpdateCandidateRequisicao updateRequisicao = new UpdateCandidateRequisicao(Operacoes.UPDATE_ACCOUNT_CANDIDATE, "DISTRIBUIDOS", email5, password5, name5);
         			
-        			String json4 = gson.toJson(lookUp);
-                    System.out.println(json4);
-                    out.println(json4);
-                    Mensagem mensagemRecebida4 = gson.fromJson(in.readLine(), Mensagem.class);
-                    System.out.println("Server: " + mensagemRecebida4.getMensagem());
-                    System.out.print ("input: ");
-                break;
+        				String jsonRequisicaoUpdate = gson.toJson(updateRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoUpdate);
+        				out.println(jsonRequisicaoUpdate);
+                    
+        				UpdateCandidateResposta updateResposta = gson.fromJson(in.readLine(), UpdateCandidateResposta.class);
+        				String jsonRespostaUpdate = gson.toJson(updateResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaUpdate);
+        				
+        				System.out.print("Nova opção: ");
+        			break;
                  
-        		case "5":
-        			System.out.print("Digite o email: ");
-                	String email5 = stdIn.readLine();
+        			case "6":
+        				DeleteCandidateRequisicao deleteRequisicao = new DeleteCandidateRequisicao(Operacoes.DELETE_ACCOUNT_CANDIDATE, "DISTRIBUIDOS");
                 	
-                	System.out.print("Digite a senha: ");
-                	String password5 = stdIn.readLine();
-                	
-                	System.out.print("Digite o nome: ");
-                	String name5 = stdIn.readLine();
-                	
-        			UpdateCandidateRequisicao update = new UpdateCandidateRequisicao(Operacoes.UPDATE_ACCOUNT_CANDIDATE, "DISTRIBUIDOS", email5, password5, name5);
-                	//UpdateCandidateResposta update = new UpdateCandidateResposta(Operacoes.UPDATE_ACCOUNT_CANDIDATE, Status.INVALID_EMAIL);
+        				String jsonRequisicaoDelete = gson.toJson(deleteRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoDelete);
+        				out.println(jsonRequisicaoDelete);
+                    
+        				DeleteCandidateResposta deleteResposta = gson.fromJson(in.readLine(), DeleteCandidateResposta.class);
+        				String jsonRespostaDelete = gson.toJson(deleteResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaDelete);
+        				
+        				System.out.print("Nova opção: ");
+        			break;
         			
-        			String json5 = gson.toJson(update);
-                    System.out.println(json5);
-                    out.println(json5);
-                    Mensagem mensagemRecebida5 = gson.fromJson(in.readLine(), Mensagem.class);
-                    System.out.println("Server: " + mensagemRecebida5.getMensagem());
-                    System.out.print ("input: ");
-                break;
-                 
-        		case "6":
-        			DeleteCandidateRequisicao delete = new DeleteCandidateRequisicao(Operacoes.DELETE_ACCOUNT_CANDIDATE, "DISTRIBUIDOS");
-                	//DeleteCandidateResposta delete = new DeleteCandidateResposta(Operacoes.DELETE_ACCOUNT_CANDIDATE, Status.SUCCESS);
-                	
-        			String json6 = gson.toJson(delete);
-                    System.out.println(json6);
-                    out.println(json6);
-                    Mensagem mensagemRecebida6 = gson.fromJson(in.readLine(), Mensagem.class);
-                    System.out.println("Server: " + mensagemRecebida6.getMensagem());
-                    System.out.print ("input: ");
-                break;
-                 
-        	}
+        			case "7":
+        				return;
+        			
+        			default:
+        				System.out.println("ERRO: Opção inválida");
+        				System.out.print("Nova opção: ");
+        			break;	
+                
+        		}
         	
-        	/*System.out.print("Digite o email: ");
-        	String email = userInput;
-        	
-        	System.out.print("Digite a senha: ");
-        	String password = stdIn.readLine();
-        	
-        	System.out.print("Digite o nome: ");
-        	String name = stdIn.readLine();*/
-        	
-        	//LoginCandidateRequisicao login = new LoginCandidateRequisicao(Operacoes.LOGIN_CANDIDATE, email, password);
-        	//LoginCandidateResposta login = new LoginCandidateResposta(Operacoes.LOGIN_CANDIDATE, Status.SUCCESS, "DISTRIBUIDOS");
-        	//LoginCandidateResposta login = new LoginCandidateResposta(Operacoes.LOGIN_CANDIDATE, Status.USER_NOT_FOUND);
-        	//LogoutCandidateRequisicao logout = new LogoutCandidateRequisicao(Operacoes.LOGOUT_CANDIDATE, "DISTRIBUIDOS");
-        	//LogoutCandidateResposta logout = new LogoutCandidateResposta(Operacoes.LOGOUT_CANDIDATE, Status.SUCCESS);
-        	//SignUpCandidateRequisicao signUp = new SignUpCandidateRequisicao(Operacoes.SIGNUP_CANDIDATE, email, password, name);
-        	//SignUpCandidateResposta signUp = new SignUpCandidateResposta(Operacoes.SIGNUP_CANDIDATE, Status.SUCCESS);
-        	//LookUpCandidateRequisicao lookUp = new LookUpCandidateRequisicao(Operacoes.LOOKUP_ACCOUNT_CANDIDATE, "DISTRIBUIDOS");
-        	//LookUpCandidateResposta lookUp = new LookUpCandidateResposta(Operacoes.LOOKUP_ACCOUNT_CANDIDATE, Status.SUCCESS, email, password, name);
-        	//UpdateCandidateRequisicao update = new UpdateCandidateRequisicao(Operacoes.UPDATE_ACCOUNT_CANDIDATE, "DISTRIBUIDOS", email, password, name);
-        	//UpdateCandidateResposta update = new UpdateCandidateResposta(Operacoes.UPDATE_ACCOUNT_CANDIDATE, Status.INVALID_EMAIL);
-        	//DeleteCandidateRequisicao delete = new DeleteCandidateRequisicao(Operacoes.DELETE_ACCOUNT_CANDIDATE, "DISTRIBUIDOS");
-        	//DeleteCandidateResposta delete = new DeleteCandidateResposta(Operacoes.DELETE_ACCOUNT_CANDIDATE, Status.SUCCESS);
-        	
-         
-            /*String json = gson.toJson(signUp);
-            System.out.println(json);
-            out.println(json);
-            Mensagem mensagemRecebida = gson.fromJson(in.readLine(), Mensagem.class);
-            System.out.println("Server: " + mensagemRecebida.getMensagem());
-            System.out.print ("input: ");*/
         }
 
         out.close();

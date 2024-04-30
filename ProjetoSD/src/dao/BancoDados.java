@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+
 public class BancoDados {
 
 	private static Connection conn = null;
@@ -61,5 +62,4 @@ public class BancoDados {
 			rs.close();
 		}
 	}
-
 }
