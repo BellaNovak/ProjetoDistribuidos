@@ -29,9 +29,10 @@ public class Servidor extends Thread {
 
 	private static void startConnection() throws IOException {
 		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("Which port should be used?");
-		int servidorPort = Integer.parseInt(br.readLine());
+		//BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		//System.out.println("Which port should be used?");
+		//int servidorPort = Integer.parseInt(br.readLine());
+		int servidorPort = 21234;
 		
 		try (ServerSocket servidor = new ServerSocket(servidorPort, 0)) {
 			
@@ -59,7 +60,8 @@ public class Servidor extends Thread {
 	@Override
 	public void run() {
 		
-		System.out.println("New thread started");
+		System.out.println("Novo cliente conectado " + cliente.getInetAddress().getHostAddress() + " na " + cliente.getPort() + " porta");
+		//System.out.println("New thread started");
 
 		try (
 				cliente;
@@ -72,7 +74,7 @@ public class Servidor extends Thread {
 				String json = inputLine;
 				System.out.println(json);
 				Mensagem mensagemRecebida = gson.fromJson(json, Mensagem.class);
-				System.out.println(mensagemRecebida.getMensagem());
+				System.out.println(mensagemRecebida);
 				System.out.println("Message from" + cliente.getInetAddress() + ": " + mensagemRecebida.getMensagem());
 				Mensagem mensagemEnviada = new Mensagem(mensagemRecebida.getMensagem().toUpperCase());
 				String responseMessageJson = gson.toJson(mensagemEnviada);
