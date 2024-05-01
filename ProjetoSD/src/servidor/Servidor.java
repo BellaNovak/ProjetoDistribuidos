@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.TreeMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -95,18 +96,14 @@ public class Servidor extends Thread {
 					
 					case LOGIN_CANDIDATE: 
 						
-						//PRECISA RECEBER O EMAIL
-						//PRECISA RECEBER A SENHA
+						LoginCandidateRequisicao login = gson.fromJson(json, LoginCandidateRequisicao.class);
+						TreeMap<String, String> data1 = (TreeMap<String,String>) login.getData();
 						
-						String email1 = "bella";
+						String email1 = data1.get("email");
+						String password1 = data1.get("password");
 						
 						Connection conn1 = BancoDados.conectar();
 						Candidate candidate1 = new CandidateDAO(conn1).buscarPorEmail(email1);
-						
-						
-						String password1 = "10101010";
-						
-						LoginCandidateRequisicao login = gson.fromJson(json, LoginCandidateRequisicao.class);
 						
 						
 						if (candidate1 != null) {
@@ -164,14 +161,15 @@ public class Servidor extends Thread {
 					case LOOKUP_ACCOUNT_CANDIDATE:
 						
 						//PRECISA RECEBER O TOKEN E VALDIAR
+						//PRECISA RECEBER O ID
 						
-						int id4 = 5;
+						LookUpCandidateRequisicao lookUp = gson.fromJson(json, LookUpCandidateRequisicao.class);
 						
+						int id4 = 1;
+
 						Connection conn4 = BancoDados.conectar();
 						Candidate candidate4 = new CandidateDAO(conn4).buscarPorCodigo(id4);
 						
-						
-						LookUpCandidateRequisicao lookUp = gson.fromJson(json, LookUpCandidateRequisicao.class);
 						LookUpCandidateResposta mensagemLookUpEnviada = new LookUpCandidateResposta(lookUp.getOperation(), Status.SUCCESS, candidate4.getEmail(), candidate4.getPassword(), candidate4.getName());
 						String jsonResposta4 = gson.toJson(mensagemLookUpEnviada);
 						System.out.println(jsonResposta4);
@@ -182,19 +180,64 @@ public class Servidor extends Thread {
 					case UPDATE_ACCOUNT_CANDIDATE:
 						
 						//PRECISA RECEBER O TOKEN E VALIDAR
-						//PRECISA RECEBER O EMAIL
+						//PRECISA RECEBER O ID
 						
 						UpdateCandidateRequisicao update = gson.fromJson(json, UpdateCandidateRequisicao.class);
+						
+						TreeMap<String, String> data5 = (TreeMap<String,String>) update.getData();
+						
+						String email5 = data5.get("email");
+						String password5 = data5.get("password");
+						String name5 = data5.get("name");
+						int id5 = 1;
+						
+						Connection conn5 = BancoDados.conectar();
+						Candidate candidate5 = new CandidateDAO(conn5).buscarPorEmail(email5);
+						
+						if(candidate5 == null) {
+							
+							Candidate candidate55 = new Candidate();
+							
+							candidate55.setIdCandidate(id5);
+							candidate55.setEmail(email5);
+	        				candidate55.setPassword(password5);
+	        				candidate55.setName(name5);
+	        				
+	        				Connection conn55 = BancoDados.conectar();
+	        				new CandidateDAO(conn55).atualizar(candidate55);
+							
+							UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.SUCCESS);
+							String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+							System.out.println(jsonResposta5);
+							out.println(jsonResposta5);
+							
+						} else {
+
+							/*candidate5.setEmail(email5);
+	        				candidate5.setPassword(password5);
+	        				candidate5.setName(name5);
+	        				
+	        				new CandidateDAO(conn5).atualizar(candidate5);*/
+	        				
+							UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.INVALID_EMAIL);
+							String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+							System.out.println(jsonResposta5);
+							out.println(jsonResposta5);
+							
+						}
+						
+						/*UpdateCandidateRequisicao update = gson.fromJson(json, UpdateCandidateRequisicao.class);
 						UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.SUCCESS);
 						String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
 						System.out.println(jsonResposta5);
-						out.println(jsonResposta5);
+						out.println(jsonResposta5);*/
 						
 					break;
 					
 					case DELETE_ACCOUNT_CANDIDATE:
 						
 						//PRECISA RECEBER O TOKEN E VALIDAR
+						//PRECISA RECEBR O ID
 						
 						DeleteCandidateRequisicao delete = gson.fromJson(json, DeleteCandidateRequisicao.class);
 						DeleteCandidateResposta mensagemDeleteEnviada = new DeleteCandidateResposta(delete.getOperation(), Status.SUCCESS);

@@ -32,6 +32,14 @@ public class Cliente {
         
 		InetAddress serverHost = InetAddress.getLocalHost();
 		int serverPort = 21234;
+		
+		/*System.out.println("Qual o IP do servidor?");
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String serverHost = br.readLine();
+
+		System.out.println("Qual a porta do servidor?");
+		br = new BufferedReader(new InputStreamReader(System.in));
+		int serverPort = Integer.parseInt(br.readLine());*/
 
         System.out.println("serverHost: " + serverHost);
         System.out.println("serverPort: " + serverPort);
@@ -69,9 +77,6 @@ public class Cliente {
         		switch(userInput){
         			case "1":
         				
-        				//PRECISA PASSAR O EMAIL
-        				//PRECISA PASSAR A SENHA
-        				
         				System.out.print("Digite o email: ");
         				String email1 = stdIn.readLine();
                 	
@@ -82,6 +87,8 @@ public class Cliente {
         				new CandidateDAO(conn1).buscarPorEmail(email1);
                 	
         				LoginCandidateRequisicao loginRequisicao = new LoginCandidateRequisicao(Operacoes.LOGIN_CANDIDATE, email1, password1);
+        				
+        				
                 	
         				String jsonRequisicaoLogin = gson.toJson(loginRequisicao);
         				System.out.println("Requisição enviada" + jsonRequisicaoLogin);
@@ -148,6 +155,7 @@ public class Cliente {
                  
         			case "4":
         				//PRECISA PASSAR O TOKEN
+        				//PRECISA PASSAR O ID
         				
         				System.out.print("Digite o token: ");
         				String token4 = stdIn.readLine();
@@ -155,9 +163,6 @@ public class Cliente {
         				System.out.print("Digite o id do candidato para buscar: ");
         				String numero4 = stdIn.readLine();
         				int id4 = Integer.parseInt(numero4);
-        				
-        				Connection conn4 = BancoDados.conectar();
-        				new CandidateDAO(conn4).buscarPorCodigo(id4);
         				
         				LookUpCandidateRequisicao lookUpRequisicao = new LookUpCandidateRequisicao(Operacoes.LOOKUP_ACCOUNT_CANDIDATE, token4);
         				
@@ -175,7 +180,7 @@ public class Cliente {
         			case "5":
         				
         				//PRECISA PASSAR O TOKEN
-        				//PRECISA PASSAR O EMAIL
+        				//PRECISA PASSAR O ID
         				
         				System.out.print("Digite o token: ");
         				String token5 = stdIn.readLine();
@@ -192,15 +197,6 @@ public class Cliente {
                 	
         				System.out.print("Digite o nome: ");
         				String name5 = stdIn.readLine();
-        				
-        				Candidate candidate5 = new Candidate();
-        				candidate5.setIdCandidate(id5);
-        				candidate5.setEmail(email5);
-        				candidate5.setPassword(password5);
-        				candidate5.setName(name5);
-        				
-        				Connection conn5 = BancoDados.conectar();
-        				new CandidateDAO(conn5).atualizar(candidate5);
                 	
         				UpdateCandidateRequisicao updateRequisicao = new UpdateCandidateRequisicao(Operacoes.UPDATE_ACCOUNT_CANDIDATE, token5, email5, password5, name5);
         			

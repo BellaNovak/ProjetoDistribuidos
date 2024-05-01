@@ -16,4 +16,12 @@ public class LoginCandidateRequisicao extends Requisicao{
 		data.put("password", password);
 	}
 
+	/*public TreeMap<String, String> data() {
+		return null;
+	}*/
+	
+	/*public void testar(){
+		System.out.println(data.get("email"));
+	}*/
+
 }

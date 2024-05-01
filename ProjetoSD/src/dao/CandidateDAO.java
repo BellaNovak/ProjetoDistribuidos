@@ -24,7 +24,7 @@ public class CandidateDAO {
 
 		try {
 
-			st = conn.prepareStatement("insert into candidato (email, password, name) values (?, ?, ?)");
+			st = conn.prepareStatement("insert into candidate (email, password, name) values (?, ?, ?)");
 
 			st.setString(1, candidate.getEmail());
 			st.setString(2, candidate.getPassword());
@@ -46,7 +46,7 @@ public class CandidateDAO {
 
 		try {
 
-			st = conn.prepareStatement("select * from candidato order by name");
+			st = conn.prepareStatement("select * from candidate order by name");
 
 			rs = st.executeQuery();
 
@@ -81,7 +81,7 @@ public class CandidateDAO {
 
 		try {
 
-			st = conn.prepareStatement("select * from candidato where id_candidate = ?");
+			st = conn.prepareStatement("select * from candidate where id_candidate = ?");
 			
 			st.setInt(1, codigoCandidate);
 
@@ -116,7 +116,7 @@ public class CandidateDAO {
 
 		try {
 
-			st = conn.prepareStatement("select * from candidato where email = ?");
+			st = conn.prepareStatement("select * from candidate where email = ?");
 
 			st.setString(1, nomeCandidate);
 
@@ -151,7 +151,7 @@ public class CandidateDAO {
 
 		try {
 
-			st = conn.prepareStatement("update candidato set email = ?, password = ?, name = ? where id_candidate = ?");
+			st = conn.prepareStatement("update candidate set email = ?, password = ?, name = ? where id_candidate = ?");
 
 			st.setString(1, candidate.getEmail());
 			st.setString(2, candidate.getPassword());
@@ -173,7 +173,7 @@ public class CandidateDAO {
 
 		try {
 
-			st = conn.prepareStatement("delete from candidato where id_candidate = ?");
+			st = conn.prepareStatement("delete from candidate where id_candidate = ?");
 
 			st.setInt(1, codigo);
 
