@@ -108,6 +108,42 @@ public class CandidateDAO {
 			BancoDados.desconectar();
 		}
 	}
+	
+	public Candidate buscarPorEmail(String nomeCandidate) throws SQLException {
+
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		try {
+
+			st = conn.prepareStatement("select * from candidato where email = ?");
+
+			st.setString(1, nomeCandidate);
+
+			rs = st.executeQuery();
+
+			if (rs.next()) {
+
+				Candidate candidate = new Candidate();
+				
+				candidate.setIdCandidate(rs.getInt("id_candidate"));
+				candidate.setEmail(rs.getString("email"));
+				candidate.setPassword(rs.getString("password"));
+				candidate.setName(rs.getString("name"));
+
+
+				return candidate;
+			}
+
+			return null;
+
+		} finally {
+
+			BancoDados.finalizarStatement(st);
+			BancoDados.finalizarResultSet(rs);
+			BancoDados.desconectar();
+		}
+	}
 
 	public void atualizar(Candidate candidate) throws SQLException {
 

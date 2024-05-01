@@ -2,10 +2,15 @@ package servidor;
 
 import java.io.*;
 import java.net.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import dao.BancoDados;
+import dao.CandidateDAO;
+import entities.Candidate;
 import enumerations.Status;
 import operacoes.DeleteCandidateRequisicao;
 import operacoes.DeleteCandidateResposta;
@@ -90,15 +95,52 @@ public class Servidor extends Thread {
 					
 					case LOGIN_CANDIDATE: 
 						
+						//PRECISA RECEBER O EMAIL
+						//PRECISA RECEBER A SENHA
+						
+						String email1 = "bella";
+						
+						Connection conn1 = BancoDados.conectar();
+						Candidate candidate1 = new CandidateDAO(conn1).buscarPorEmail(email1);
+						
+						
+						String password1 = "10101010";
+						
 						LoginCandidateRequisicao login = gson.fromJson(json, LoginCandidateRequisicao.class);
+						
+						
+						if (candidate1 != null) {
+							if(candidate1.getPassword().equals(password1)) {
+								
+								LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.SUCCESS, "DISTRIBUIDOS");
+								String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
+								System.out.println(jsonResposta1);
+								out.println(jsonResposta1);
+							} else {
+								LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.INVALID_LOGIN);
+								String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
+								System.out.println(jsonResposta1);
+								out.println(jsonResposta1);
+							}
+							
+						} else {
+							LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.INVALID_LOGIN);
+							String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
+							System.out.println(jsonResposta1);
+							out.println(jsonResposta1);
+						}
+						
+						/*LoginCandidateRequisicao login = gson.fromJson(json, LoginCandidateRequisicao.class);
 						LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.SUCCESS, "DISTRIBUIDOS");
 						String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
 						System.out.println(jsonResposta1);
-						out.println(jsonResposta1);
+						out.println(jsonResposta1);*/
 						
 					break;
 				
 					case LOGOUT_CANDIDATE:
+						
+						//PRECISA RECEBER E VALIDAR O TOKEN
 						
 						LogoutCandidateRequisicao logout = gson.fromJson(json,  LogoutCandidateRequisicao.class);
 						LoginCandidateResposta mensagemLogoutEnviada = new LoginCandidateResposta(logout.getOperation(), Status.SUCCESS);
@@ -121,8 +163,16 @@ public class Servidor extends Thread {
 					
 					case LOOKUP_ACCOUNT_CANDIDATE:
 						
+						//PRECISA RECEBER O TOKEN E VALDIAR
+						
+						int id4 = 5;
+						
+						Connection conn4 = BancoDados.conectar();
+						Candidate candidate4 = new CandidateDAO(conn4).buscarPorCodigo(id4);
+						
+						
 						LookUpCandidateRequisicao lookUp = gson.fromJson(json, LookUpCandidateRequisicao.class);
-						LookUpCandidateResposta mensagemLookUpEnviada = new LookUpCandidateResposta(lookUp.getOperation(), Status.SUCCESS, "bella", "123", "Isabella");
+						LookUpCandidateResposta mensagemLookUpEnviada = new LookUpCandidateResposta(lookUp.getOperation(), Status.SUCCESS, candidate4.getEmail(), candidate4.getPassword(), candidate4.getName());
 						String jsonResposta4 = gson.toJson(mensagemLookUpEnviada);
 						System.out.println(jsonResposta4);
 						out.println(jsonResposta4);
@@ -130,6 +180,9 @@ public class Servidor extends Thread {
 					break;
 					
 					case UPDATE_ACCOUNT_CANDIDATE:
+						
+						//PRECISA RECEBER O TOKEN E VALIDAR
+						//PRECISA RECEBER O EMAIL
 						
 						UpdateCandidateRequisicao update = gson.fromJson(json, UpdateCandidateRequisicao.class);
 						UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.SUCCESS);
@@ -140,6 +193,8 @@ public class Servidor extends Thread {
 					break;
 					
 					case DELETE_ACCOUNT_CANDIDATE:
+						
+						//PRECISA RECEBER O TOKEN E VALIDAR
 						
 						DeleteCandidateRequisicao delete = gson.fromJson(json, DeleteCandidateRequisicao.class);
 						DeleteCandidateResposta mensagemDeleteEnviada = new DeleteCandidateResposta(delete.getOperation(), Status.SUCCESS);
@@ -155,14 +210,6 @@ public class Servidor extends Thread {
 					
 				}
 			
-				/*String responseMessageJson = gson.toJson(mensagemEnviada);
-				out.println(responseMessageJson);
-				
-				System.out.println(mensagemRecebida);
-				System.out.println("Message from" + cliente.getInetAddress() + ": " + mensagemRecebida.getMensagem());
-				Mensagem mensagemEnviada = new Mensagem(mensagemRecebida.getMensagem().toUpperCase());
-				String responseMessageJson = gson.toJson(mensagemEnviada);
-				out.println(responseMessageJson);*/
 			}
 			
 			out.close();
@@ -171,6 +218,9 @@ public class Servidor extends Thread {
 			
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

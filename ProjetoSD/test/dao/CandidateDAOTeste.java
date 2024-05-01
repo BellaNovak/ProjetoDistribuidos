@@ -50,10 +50,28 @@ public class CandidateDAOTeste {
 		}
 	}
 	
+	public static void buscarPorEmailTeste() throws SQLException, IOException {
+
+		String emailCandidate = "bella";
+
+		Connection conn = BancoDados.conectar();
+		Candidate candidate = new CandidateDAO(conn).buscarPorEmail(emailCandidate);
+
+		if (candidate != null) {
+
+			System.out.println(candidate.getIdCandidate() + " - " + candidate.getEmail() + " - " + candidate.getPassword() + " - " + candidate.getName());
+
+
+		} else {
+
+			System.out.println("Email não encontrado.");
+		}
+	}
+	
 	public static void atualizarCandidateTeste() throws SQLException, IOException {
 
 		Candidate candidate = new Candidate();
-		candidate.setIdCandidate(1);
+		candidate.setIdCandidate(2);
 		candidate.setEmail("bella99@gmail.com");
 		candidate.setPassword("12333");
 		candidate.setName("Isabella Novaes");
@@ -86,9 +104,10 @@ public class CandidateDAOTeste {
 
 		try {
 
-			CandidateDAOTeste.cadastrarCandidateTeste();
+			//CandidateDAOTeste.cadastrarCandidateTeste();
 			//CandidateDAOTeste. buscarTodosCandidateTeste();
 			//CandidateDAOTeste.buscarPorCodigoTeste();
+			CandidateDAOTeste.buscarPorEmailTeste();
 			//CandidateDAOTeste.atualizarCandidateTeste();
 			//CandidateDAOTeste.excluirCandidateTeste();
 
