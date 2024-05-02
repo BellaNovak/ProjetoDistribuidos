@@ -2,15 +2,11 @@ package cliente;
 
 import java.io.*;
 import java.net.*;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import dao.BancoDados;
-import dao.CandidateDAO;
-import entities.Candidate;
 import enumerations.Operacoes;
 import operacoes.DeleteCandidateRequisicao;
 import operacoes.DeleteCandidateResposta;
@@ -73,7 +69,9 @@ public class Cliente {
         
         System.out.println("1- Login\n2- Logout\n3- SignUp\n4- LookUp\n5- Update\n6- Delete\n7- Finalizar\n");
         System.out.print("Digite a opcao: ");
-
+        
+        String token = null;
+        
         while ((userInput = stdIn.readLine()) != null) {
         		
         		switch(userInput){
@@ -94,6 +92,7 @@ public class Cliente {
         				LoginCandidateResposta loginResposta = gson.fromJson(in.readLine(), LoginCandidateResposta.class);
         				String jsonRespostaLogin = gson.toJson(loginResposta);
         				System.out.println("Resposta recebida: " + jsonRespostaLogin);
+        				token = loginResposta.getData().get("token"); 
         				
         				System.out.print("Nova opção: ");
                     
@@ -101,12 +100,7 @@ public class Cliente {
                 
         			case "2": 
         				
-        				//PRECISA PASSAR O TOKEN
-        				
-        				System.out.print("Digite o token: ");
-        				String token2 = stdIn.readLine();
-        				
-        				LogoutCandidateRequisicao logoutRequisicao = new LogoutCandidateRequisicao(Operacoes.LOGOUT_CANDIDATE, token2);
+        				LogoutCandidateRequisicao logoutRequisicao = new LogoutCandidateRequisicao(Operacoes.LOGOUT_CANDIDATE, token);
         			
         				String jsonRequisicaoLogout = gson.toJson(logoutRequisicao);
         				System.out.println("Requisição enviada: " + jsonRequisicaoLogout);
@@ -143,17 +137,8 @@ public class Cliente {
         			break; 
                  
         			case "4":
-        				//PRECISA PASSAR O TOKEN
-        				//PRECISA PASSAR O ID
         				
-        				System.out.print("Digite o token: ");
-        				String token4 = stdIn.readLine();
-        				
-        				System.out.print("Digite o id do candidato para buscar: ");
-        				String numero4 = stdIn.readLine();
-        				int id4 = Integer.parseInt(numero4);
-        				
-        				LookUpCandidateRequisicao lookUpRequisicao = new LookUpCandidateRequisicao(Operacoes.LOOKUP_ACCOUNT_CANDIDATE, token4);
+        				LookUpCandidateRequisicao lookUpRequisicao = new LookUpCandidateRequisicao(Operacoes.LOOKUP_ACCOUNT_CANDIDATE, token);
         				
         				String jsonRequisicaoLookUp = gson.toJson(lookUpRequisicao);
         				System.out.println("Requisição enviada: " + jsonRequisicaoLookUp);
@@ -168,16 +153,6 @@ public class Cliente {
                  
         			case "5":
         				
-        				//PRECISA PASSAR O TOKEN
-        				//PRECISA PASSAR O ID
-        				
-        				System.out.print("Digite o token: ");
-        				String token5 = stdIn.readLine();
-        				
-        				System.out.print("Digite o id procurado: ");
-        				String numero5 = stdIn.readLine();
-        				int id5 = Integer.parseInt(numero5);
-        				
         				System.out.print("Digite o email: ");
         				String email5 = stdIn.readLine();
                 	
@@ -187,7 +162,7 @@ public class Cliente {
         				System.out.print("Digite o nome: ");
         				String name5 = stdIn.readLine();
                 	
-        				UpdateCandidateRequisicao updateRequisicao = new UpdateCandidateRequisicao(Operacoes.UPDATE_ACCOUNT_CANDIDATE, token5, email5, password5, name5);
+        				UpdateCandidateRequisicao updateRequisicao = new UpdateCandidateRequisicao(Operacoes.UPDATE_ACCOUNT_CANDIDATE, token, email5, password5, name5);
         			
         				String jsonRequisicaoUpdate = gson.toJson(updateRequisicao);
         				System.out.println("Requisição enviada: " + jsonRequisicaoUpdate);
@@ -198,22 +173,12 @@ public class Cliente {
         				System.out.println("Resposta recebida: " + jsonRespostaUpdate);
         				
         				System.out.print("Nova opção: ");
+        				
         			break;
                  
         			case "6":
-        				//PRECISA PASSAR O TOKEN
         				
-        				System.out.print("Digite o token: ");
-        				String token6 = stdIn.readLine();
-        				
-        				System.out.print("Digite o id que deseja excluir: ");
-        				String numero6 = stdIn.readLine();
-        				int id6 = Integer.parseInt(numero6);
-        				
-        				Connection conn = BancoDados.conectar();
-        				new CandidateDAO(conn).excluir(id6);
-        				
-        				DeleteCandidateRequisicao deleteRequisicao = new DeleteCandidateRequisicao(Operacoes.DELETE_ACCOUNT_CANDIDATE, token6);
+        				DeleteCandidateRequisicao deleteRequisicao = new DeleteCandidateRequisicao(Operacoes.DELETE_ACCOUNT_CANDIDATE, token);
                 	
         				String jsonRequisicaoDelete = gson.toJson(deleteRequisicao);
         				System.out.println("Requisição enviada: " + jsonRequisicaoDelete);

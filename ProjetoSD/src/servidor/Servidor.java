@@ -6,12 +6,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.TreeMap;
 
+import java.util.Map;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import dao.BancoDados;
 import dao.CandidateDAO;
 import entities.Candidate;
+import enumerations.Role;
 import enumerations.Status;
 import operacoes.DeleteCandidateRequisicao;
 import operacoes.DeleteCandidateResposta;
@@ -28,11 +31,20 @@ import operacoes.SignUpCandidateResposta;
 import operacoes.UpdateCandidateRequisicao;
 import operacoes.UpdateCandidateResposta;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm; 
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.JWTVerifier;
+
 
 public class Servidor extends Thread {
 
 	private final Socket cliente;
 	private Gson gson = new GsonBuilder().create();
+	
+	private final Algorithm algorithm = Algorithm.HMAC256("DISTRIBUIDOS");
+	private final JWTVerifier verifica = JWT.require(algorithm).build();
 
 	public static void main(String[] args) {
 		try {
@@ -99,6 +111,7 @@ public class Servidor extends Thread {
 					case LOGIN_CANDIDATE: 
 						
 						LoginCandidateRequisicao login = gson.fromJson(json, LoginCandidateRequisicao.class);
+						
 						TreeMap<String, String> data1 = (TreeMap<String,String>) login.getData();
 						
 						String email1 = data1.get("email");
@@ -106,6 +119,7 @@ public class Servidor extends Thread {
 						
 						Connection conn1 = BancoDados.conectar();
 						Candidate candidate1 = new CandidateDAO(conn1).buscarPorEmail(email1);
+						
 						
 						if(email1.trim().equals("")|| password1.trim().equals("")) {
 							RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(login.getOperation(), Status.INVALID_FIELD);
@@ -117,11 +131,21 @@ public class Servidor extends Thread {
 							
 							if (candidate1 != null) {
 								if(candidate1.getPassword().equals(password1)) {
+			
+									String token = null;
+									
+									try{
+										token = JWT.create().withClaim("id", candidate1.getIdCandidate()).withClaim("role", Role.CANDIDATE.toString()).sign(this.algorithm);
+									
+									} catch(JWTCreationException e){
+										System.out.println(e);
+									}
 
-									LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.SUCCESS, "DISTRIBUIDOS");
+									LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.SUCCESS, token);
 									String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
 									System.out.println(jsonResposta1);
 									out.println(jsonResposta1);
+									
 								} else {
 									LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.INVALID_LOGIN);
 									String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
@@ -141,14 +165,25 @@ public class Servidor extends Thread {
 					break;
 				
 					case LOGOUT_CANDIDATE:
-						
-						//PRECISA RECEBER E VALIDAR O TOKEN
-						
+
 						LogoutCandidateRequisicao logout = gson.fromJson(json,  LogoutCandidateRequisicao.class);
-						LoginCandidateResposta mensagemLogoutEnviada = new LoginCandidateResposta(logout.getOperation(), Status.SUCCESS);
-						String jsonResposta2 = gson.toJson(mensagemLogoutEnviada);
-						System.out.println(jsonResposta2);
-						out.println(jsonResposta2);
+						
+						try{
+							verifica.verify(logout.getToken());
+							
+							LoginCandidateResposta mensagemLogoutEnviada = new LoginCandidateResposta(logout.getOperation(), Status.SUCCESS);
+							String jsonResposta2 = gson.toJson(mensagemLogoutEnviada);
+							System.out.println(jsonResposta2);
+							out.println(jsonResposta2);
+							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(logout.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta2 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta2);
+							out.println(jsonResposta2);
+						}
+
 						
 					
 					break;
@@ -189,89 +224,128 @@ public class Servidor extends Thread {
 					
 					case LOOKUP_ACCOUNT_CANDIDATE:
 						
-						//PRECISA RECEBER O TOKEN E VALDIAR
-						//PRECISA RECEBER O ID
-						
 						LookUpCandidateRequisicao lookUp = gson.fromJson(json, LookUpCandidateRequisicao.class);
 						
-						int id4 = 1;
+						try {
+							verifica.verify(lookUp.getToken());
+							Map<String, Claim> decoded = JWT.decode(lookUp.getToken()).getClaims();
+		                    int id = decoded.get("id").asInt();
 
-						Connection conn4 = BancoDados.conectar();
-						Candidate candidate4 = new CandidateDAO(conn4).buscarPorCodigo(id4);
+							Connection conn4 = BancoDados.conectar();
+							Candidate candidate4 = new CandidateDAO(conn4).buscarPorCodigo(id);
+							
+							LookUpCandidateResposta mensagemLookUpEnviada = new LookUpCandidateResposta(lookUp.getOperation(), Status.SUCCESS, candidate4.getEmail(), candidate4.getPassword(), candidate4.getName());
+							String jsonResposta4 = gson.toJson(mensagemLookUpEnviada);
+							System.out.println(jsonResposta4);
+							out.println(jsonResposta4);
+							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(lookUp.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta4 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta4);
+							out.println(jsonResposta4);
+						}
 						
-						LookUpCandidateResposta mensagemLookUpEnviada = new LookUpCandidateResposta(lookUp.getOperation(), Status.SUCCESS, candidate4.getEmail(), candidate4.getPassword(), candidate4.getName());
-						String jsonResposta4 = gson.toJson(mensagemLookUpEnviada);
-						System.out.println(jsonResposta4);
-						out.println(jsonResposta4);
 						
 					break;
 					
 					case UPDATE_ACCOUNT_CANDIDATE:
 						
-						//PRECISA RECEBER O TOKEN E VALIDAR
-						//PRECISA RECEBER O ID
-						
 						UpdateCandidateRequisicao update = gson.fromJson(json, UpdateCandidateRequisicao.class);
 						
-						TreeMap<String, String> data5 = (TreeMap<String,String>) update.getData();
 						
-						String email5 = data5.get("email");
-						String password5 = data5.get("password");
-						String name5 = data5.get("name");
-						int id5 = 1;
-						
-						Connection conn5 = BancoDados.conectar();
-						Candidate candidate5 = new CandidateDAO(conn5).buscarPorEmail(email5);
-						
-						if(email5.trim().equals("")|| password5.trim().equals("") || name5.trim().equals("")) {
+						try {
 							
-							RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(update.getOperation(), Status.INVALID_FIELD);
-							String jsonResposta5 = gson.toJson(mensagemNulaEnviada);
-							System.out.println(jsonResposta5);
-							out.println(jsonResposta5);
+							verifica.verify(update.getToken());
+							Map<String, Claim> decoded = JWT.decode(update.getToken()).getClaims();
+		                    int id = decoded.get("id").asInt();
 							
-						} else {
+							TreeMap<String, String> data5 = (TreeMap<String,String>) update.getData();
 							
-							if(candidate5 == null) {
+							String email5 = data5.get("email");
+							String password5 = data5.get("password");
+							String name5 = data5.get("name");
+			
+							
+							Connection conn5 = BancoDados.conectar();
+							Candidate candidate5 = new CandidateDAO(conn5).buscarPorEmail(email5);
+							
+							if(email5.trim().equals("")|| password5.trim().equals("") || name5.trim().equals("")) {
 								
-								Candidate candidate55 = new Candidate();
-								
-								candidate55.setIdCandidate(id5);
-								candidate55.setEmail(email5);
-		        				candidate55.setPassword(password5);
-		        				candidate55.setName(name5);
-		        				
-		        				Connection conn55 = BancoDados.conectar();
-		        				new CandidateDAO(conn55).atualizar(candidate55);
-								
-								UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.SUCCESS);
-								String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+								RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(update.getOperation(), Status.INVALID_FIELD);
+								String jsonResposta5 = gson.toJson(mensagemNulaEnviada);
 								System.out.println(jsonResposta5);
 								out.println(jsonResposta5);
 								
 							} else {
-		        				
-								UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.INVALID_EMAIL);
-								String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
-								System.out.println(jsonResposta5);
-								out.println(jsonResposta5);
+								
+								if(candidate5 == null) {
+									
+									Candidate candidate55 = new Candidate();
+									
+									candidate55.setIdCandidate(id);
+									candidate55.setEmail(email5);
+			        				candidate55.setPassword(password5);
+			        				candidate55.setName(name5);
+			        				
+			        				Connection conn55 = BancoDados.conectar();
+			        				new CandidateDAO(conn55).atualizar(candidate55);
+									
+									UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.SUCCESS);
+									String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+									System.out.println(jsonResposta5);
+									out.println(jsonResposta5);
+									
+								} else {
+			        				
+									UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.INVALID_EMAIL);
+									String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+									System.out.println(jsonResposta5);
+									out.println(jsonResposta5);
+									
+								}
 								
 							}
 							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(update.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta5 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta5);
+							out.println(jsonResposta5);
 						}
+						
 
 						
 					break;
 					
 					case DELETE_ACCOUNT_CANDIDATE:
 						
-						//PRECISA RECEBER O TOKEN E VALIDAR
-						
 						DeleteCandidateRequisicao delete = gson.fromJson(json, DeleteCandidateRequisicao.class);
-						DeleteCandidateResposta mensagemDeleteEnviada = new DeleteCandidateResposta(delete.getOperation(), Status.SUCCESS);
-						String jsonResposta6 = gson.toJson(mensagemDeleteEnviada);
-						System.out.println(jsonResposta6);
-						out.println(jsonResposta6);
+						
+						try {
+							
+							verifica.verify(delete.getToken());
+							Map<String, Claim> decoded5 = JWT.decode(delete.getToken()).getClaims();
+		                    int id = decoded5.get("id").asInt();
+		                    
+		                    Connection conn = BancoDados.conectar();
+							new CandidateDAO(conn).excluir(id);
+							
+							DeleteCandidateResposta mensagemDeleteEnviada = new DeleteCandidateResposta(delete.getOperation(), Status.SUCCESS);
+							String jsonResposta6 = gson.toJson(mensagemDeleteEnviada);
+							System.out.println(jsonResposta6);
+							out.println(jsonResposta6);
+							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(delete.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta6 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta6);
+							out.println(jsonResposta6);
+						}
+						
 						
 					break;
 					
