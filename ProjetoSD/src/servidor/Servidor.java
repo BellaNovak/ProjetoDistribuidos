@@ -21,6 +21,8 @@ import operacoes.LogoutCandidateRequisicao;
 import operacoes.LookUpCandidateRequisicao;
 import operacoes.LookUpCandidateResposta;
 import operacoes.Requisicao;
+import operacoes.RequisicaoInvalida;
+import operacoes.RespostaInvalida;
 import operacoes.SignUpCandidateRequisicao;
 import operacoes.SignUpCandidateResposta;
 import operacoes.UpdateCandidateRequisicao;
@@ -105,34 +107,37 @@ public class Servidor extends Thread {
 						Connection conn1 = BancoDados.conectar();
 						Candidate candidate1 = new CandidateDAO(conn1).buscarPorEmail(email1);
 						
-						
-						if (candidate1 != null) {
-							if(candidate1.getPassword().equals(password1)) {
-								
-								LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.SUCCESS, "DISTRIBUIDOS");
-								String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
-								System.out.println(jsonResposta1);
-								out.println(jsonResposta1);
+						if(email1.trim().equals("")|| password1.trim().equals("")) {
+							RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(login.getOperation(), Status.INVALID_FIELD);
+							String jsonResposta1 = gson.toJson(mensagemNulaEnviada);
+							System.out.println(jsonResposta1);
+							out.println(jsonResposta1);
+							
+						} else {
+							
+							if (candidate1 != null) {
+								if(candidate1.getPassword().equals(password1)) {
+
+									LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.SUCCESS, "DISTRIBUIDOS");
+									String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
+									System.out.println(jsonResposta1);
+									out.println(jsonResposta1);
+								} else {
+									LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.INVALID_LOGIN);
+									String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
+									System.out.println(jsonResposta1);
+									out.println(jsonResposta1);
+								}
+									
 							} else {
 								LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.INVALID_LOGIN);
 								String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
 								System.out.println(jsonResposta1);
 								out.println(jsonResposta1);
 							}
-							
-						} else {
-							LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.INVALID_LOGIN);
-							String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
-							System.out.println(jsonResposta1);
-							out.println(jsonResposta1);
 						}
 						
-						/*LoginCandidateRequisicao login = gson.fromJson(json, LoginCandidateRequisicao.class);
-						LoginCandidateResposta mensagemLoginEnviada = new LoginCandidateResposta(login.getOperation(), Status.SUCCESS, "DISTRIBUIDOS");
-						String jsonResposta1 = gson.toJson(mensagemLoginEnviada);
-						System.out.println(jsonResposta1);
-						out.println(jsonResposta1);*/
-						
+							
 					break;
 				
 					case LOGOUT_CANDIDATE:
@@ -151,10 +156,34 @@ public class Servidor extends Thread {
 					case SIGNUP_CANDIDATE:
 						
 						SignUpCandidateRequisicao signUp = gson.fromJson(json, SignUpCandidateRequisicao.class);
-						SignUpCandidateResposta mensagemSignUpEnviada = new SignUpCandidateResposta(signUp.getOperation(), Status.SUCCESS);
-						String jsonResposta3 = gson.toJson(mensagemSignUpEnviada);
-						System.out.println(jsonResposta3);
-						out.println(jsonResposta3);
+						
+						TreeMap<String, String> data3 = (TreeMap<String,String>) signUp.getData();
+						
+						String email3 = data3.get("email");
+						String password3 = data3.get("password");
+						String name3 = data3.get("name");
+						
+						if(email3.trim().equals("")|| password3.trim().equals("") || name3.trim().equals("")) {
+							
+							RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(signUp.getOperation(), Status.INVALID_FIELD);
+							String jsonResposta3 = gson.toJson(mensagemNulaEnviada);
+							System.out.println(jsonResposta3);
+							out.println(jsonResposta3);
+						} else {
+							
+							Candidate candidate3 = new Candidate();
+	        				candidate3.setEmail(email3);
+	        				candidate3.setPassword(password3);
+	        				candidate3.setName(name3);
+
+	        				Connection conn3 = BancoDados.conectar();
+	        				new CandidateDAO(conn3).cadastrar(candidate3);
+	        				
+							SignUpCandidateResposta mensagemSignUpEnviada = new SignUpCandidateResposta(signUp.getOperation(), Status.SUCCESS);
+							String jsonResposta3 = gson.toJson(mensagemSignUpEnviada);
+							System.out.println(jsonResposta3);
+							out.println(jsonResposta3);
+						}
 						
 					break;
 					
@@ -194,50 +223,49 @@ public class Servidor extends Thread {
 						Connection conn5 = BancoDados.conectar();
 						Candidate candidate5 = new CandidateDAO(conn5).buscarPorEmail(email5);
 						
-						if(candidate5 == null) {
+						if(email5.trim().equals("")|| password5.trim().equals("") || name5.trim().equals("")) {
 							
-							Candidate candidate55 = new Candidate();
-							
-							candidate55.setIdCandidate(id5);
-							candidate55.setEmail(email5);
-	        				candidate55.setPassword(password5);
-	        				candidate55.setName(name5);
-	        				
-	        				Connection conn55 = BancoDados.conectar();
-	        				new CandidateDAO(conn55).atualizar(candidate55);
-							
-							UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.SUCCESS);
-							String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+							RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(update.getOperation(), Status.INVALID_FIELD);
+							String jsonResposta5 = gson.toJson(mensagemNulaEnviada);
 							System.out.println(jsonResposta5);
 							out.println(jsonResposta5);
 							
 						} else {
-
-							/*candidate5.setEmail(email5);
-	        				candidate5.setPassword(password5);
-	        				candidate5.setName(name5);
-	        				
-	        				new CandidateDAO(conn5).atualizar(candidate5);*/
-	        				
-							UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.INVALID_EMAIL);
-							String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
-							System.out.println(jsonResposta5);
-							out.println(jsonResposta5);
+							
+							if(candidate5 == null) {
+								
+								Candidate candidate55 = new Candidate();
+								
+								candidate55.setIdCandidate(id5);
+								candidate55.setEmail(email5);
+		        				candidate55.setPassword(password5);
+		        				candidate55.setName(name5);
+		        				
+		        				Connection conn55 = BancoDados.conectar();
+		        				new CandidateDAO(conn55).atualizar(candidate55);
+								
+								UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.SUCCESS);
+								String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+								System.out.println(jsonResposta5);
+								out.println(jsonResposta5);
+								
+							} else {
+		        				
+								UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.INVALID_EMAIL);
+								String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+								System.out.println(jsonResposta5);
+								out.println(jsonResposta5);
+								
+							}
 							
 						}
-						
-						/*UpdateCandidateRequisicao update = gson.fromJson(json, UpdateCandidateRequisicao.class);
-						UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.SUCCESS);
-						String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
-						System.out.println(jsonResposta5);
-						out.println(jsonResposta5);*/
+
 						
 					break;
 					
 					case DELETE_ACCOUNT_CANDIDATE:
 						
 						//PRECISA RECEBER O TOKEN E VALIDAR
-						//PRECISA RECEBR O ID
 						
 						DeleteCandidateRequisicao delete = gson.fromJson(json, DeleteCandidateRequisicao.class);
 						DeleteCandidateResposta mensagemDeleteEnviada = new DeleteCandidateResposta(delete.getOperation(), Status.SUCCESS);
@@ -245,10 +273,18 @@ public class Servidor extends Thread {
 						System.out.println(jsonResposta6);
 						out.println(jsonResposta6);
 						
-					break;	
+					break;
+					
+					case NAO_EXISTE:
+						
+						RequisicaoInvalida invalida = gson.fromJson(json,  RequisicaoInvalida.class);
+						RespostaInvalida mensagemInvalidaEnviada = new RespostaInvalida(invalida.getOperation(), Status.INVALID_OPERATION);
+						String jsonResposta7 = gson.toJson(mensagemInvalidaEnviada);
+						System.out.println(jsonResposta7);
+						out.println(jsonResposta7);
 					
 					default:
-						System.out.println("ERRO");
+
 					break;
 					
 				}
@@ -262,7 +298,6 @@ public class Servidor extends Thread {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

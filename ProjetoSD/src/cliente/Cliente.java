@@ -20,6 +20,8 @@ import operacoes.LogoutCandidateRequisicao;
 import operacoes.LogoutCandidateResposta;
 import operacoes.LookUpCandidateRequisicao;
 import operacoes.LookUpCandidateResposta;
+import operacoes.RequisicaoInvalida;
+import operacoes.RespostaInvalida;
 import operacoes.SignUpCandidateRequisicao;
 import operacoes.SignUpCandidateResposta;
 import operacoes.UpdateCandidateRequisicao;
@@ -83,13 +85,8 @@ public class Cliente {
         				System.out.print("Digite a senha: ");
         				String password1 = stdIn.readLine();
         				
-        				Connection conn1 = BancoDados.conectar();
-        				new CandidateDAO(conn1).buscarPorEmail(email1);
-                	
         				LoginCandidateRequisicao loginRequisicao = new LoginCandidateRequisicao(Operacoes.LOGIN_CANDIDATE, email1, password1);
         				
-        				
-                	
         				String jsonRequisicaoLogin = gson.toJson(loginRequisicao);
         				System.out.println("Requisição enviada" + jsonRequisicaoLogin);
         				out.println(jsonRequisicaoLogin);
@@ -131,14 +128,6 @@ public class Cliente {
                 	
         				System.out.print("Digite o nome: ");
         				String name3 = stdIn.readLine();
-        				
-        				Candidate candidate3 = new Candidate();
-        				candidate3.setEmail(email3);
-        				candidate3.setPassword(password3);
-        				candidate3.setName(name3);
-
-        				Connection conn3 = BancoDados.conectar();
-        				new CandidateDAO(conn3).cadastrar(candidate3);
                 	
         				SignUpCandidateRequisicao signUpRequisicao = new SignUpCandidateRequisicao(Operacoes.SIGNUP_CANDIDATE, email3, password3, name3);
         			
@@ -241,7 +230,17 @@ public class Cliente {
         				return;
         			
         			default:
-        				System.out.println("ERRO: Opção inválida");
+        				//System.out.println("ERRO: Opção inválida");
+        				RequisicaoInvalida invalidaRequisicao = new RequisicaoInvalida(Operacoes.NAO_EXISTE);
+        				
+        				String jsonRequisicaoInvalida = gson.toJson(invalidaRequisicao);
+        				System.out.println("Requisição enviada" + jsonRequisicaoInvalida);
+        				out.println(jsonRequisicaoInvalida);
+        				
+        				RespostaInvalida invalidaResposta = gson.fromJson(in.readLine(), RespostaInvalida.class);
+        				String jsonRespostaInvalida = gson.toJson(invalidaResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaInvalida);
+        				
         				System.out.print("Nova opção: ");
         			break;	
                 
