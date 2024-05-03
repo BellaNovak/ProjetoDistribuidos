@@ -9,5 +9,6 @@ public enum Status {
 	INVALID_OPERATION,
 	INVALID_FIELD,
 	INVALID_TOKEN,
+	USER_EXISTS,
 	
 }

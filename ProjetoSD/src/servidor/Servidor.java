@@ -117,6 +117,9 @@ public class Servidor extends Thread {
 						String email1 = data1.get("email");
 						String password1 = data1.get("password");
 						
+						System.out.println(email1);
+						System.out.println(password1);
+						
 						Connection conn1 = BancoDados.conectar();
 						Candidate candidate1 = new CandidateDAO(conn1).buscarPorEmail(email1);
 						
@@ -168,6 +171,8 @@ public class Servidor extends Thread {
 
 						LogoutCandidateRequisicao logout = gson.fromJson(json,  LogoutCandidateRequisicao.class);
 						
+						System.out.println(logout.getToken());
+						
 						try{
 							verifica.verify(logout.getToken());
 							
@@ -198,6 +203,14 @@ public class Servidor extends Thread {
 						String password3 = data3.get("password");
 						String name3 = data3.get("name");
 						
+						System.out.println(email3);
+						System.out.println(password3);
+						System.out.println(name3);
+						
+						Connection conn3 = BancoDados.conectar();
+						Candidate candidate3 = new CandidateDAO(conn3).buscarPorEmail(email3);
+		
+						
 						if(email3.trim().equals("")|| password3.trim().equals("") || name3.trim().equals("")) {
 							
 							RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(signUp.getOperation(), Status.INVALID_FIELD);
@@ -206,18 +219,30 @@ public class Servidor extends Thread {
 							out.println(jsonResposta3);
 						} else {
 							
-							Candidate candidate3 = new Candidate();
-	        				candidate3.setEmail(email3);
-	        				candidate3.setPassword(password3);
-	        				candidate3.setName(name3);
+							if(candidate3 == null)
+							{
+								Candidate candidate33 = new Candidate();
+		        				candidate33.setEmail(email3);
+		        				candidate33.setPassword(password3);
+		        				candidate33.setName(name3);
 
-	        				Connection conn3 = BancoDados.conectar();
-	        				new CandidateDAO(conn3).cadastrar(candidate3);
-	        				
-							SignUpCandidateResposta mensagemSignUpEnviada = new SignUpCandidateResposta(signUp.getOperation(), Status.SUCCESS);
-							String jsonResposta3 = gson.toJson(mensagemSignUpEnviada);
-							System.out.println(jsonResposta3);
-							out.println(jsonResposta3);
+		        				Connection conn33 = BancoDados.conectar();
+		        				new CandidateDAO(conn33).cadastrar(candidate33);
+		        				
+								SignUpCandidateResposta mensagemSignUpEnviada = new SignUpCandidateResposta(signUp.getOperation(), Status.SUCCESS);
+								String jsonResposta3 = gson.toJson(mensagemSignUpEnviada);
+								System.out.println(jsonResposta3);
+								out.println(jsonResposta3);
+								
+							} else {
+								
+								SignUpCandidateResposta mensagemSignUpEnviada = new SignUpCandidateResposta(signUp.getOperation(), Status.USER_EXISTS);
+								String jsonResposta3 = gson.toJson(mensagemSignUpEnviada);
+								System.out.println(jsonResposta3);
+								out.println(jsonResposta3);
+								
+							}
+						
 						}
 						
 					break;
@@ -226,13 +251,15 @@ public class Servidor extends Thread {
 						
 						LookUpCandidateRequisicao lookUp = gson.fromJson(json, LookUpCandidateRequisicao.class);
 						
+						System.out.println(lookUp.getToken());
+						
 						try {
 							verifica.verify(lookUp.getToken());
 							Map<String, Claim> decoded = JWT.decode(lookUp.getToken()).getClaims();
-		                    int id = decoded.get("id").asInt();
+		                    int id4 = decoded.get("id").asInt();
 
 							Connection conn4 = BancoDados.conectar();
-							Candidate candidate4 = new CandidateDAO(conn4).buscarPorCodigo(id);
+							Candidate candidate4 = new CandidateDAO(conn4).buscarPorCodigo(id4);
 							
 							LookUpCandidateResposta mensagemLookUpEnviada = new LookUpCandidateResposta(lookUp.getOperation(), Status.SUCCESS, candidate4.getEmail(), candidate4.getPassword(), candidate4.getName());
 							String jsonResposta4 = gson.toJson(mensagemLookUpEnviada);
@@ -254,19 +281,23 @@ public class Servidor extends Thread {
 						
 						UpdateCandidateRequisicao update = gson.fromJson(json, UpdateCandidateRequisicao.class);
 						
+						System.out.println(update.getToken());
 						
 						try {
 							
 							verifica.verify(update.getToken());
 							Map<String, Claim> decoded = JWT.decode(update.getToken()).getClaims();
-		                    int id = decoded.get("id").asInt();
+		                    int id5 = decoded.get("id").asInt();
 							
 							TreeMap<String, String> data5 = (TreeMap<String,String>) update.getData();
 							
 							String email5 = data5.get("email");
 							String password5 = data5.get("password");
 							String name5 = data5.get("name");
-			
+							
+							System.out.println(email5);
+							System.out.println(password5);
+							System.out.println(name5);
 							
 							Connection conn5 = BancoDados.conectar();
 							Candidate candidate5 = new CandidateDAO(conn5).buscarPorEmail(email5);
@@ -284,7 +315,7 @@ public class Servidor extends Thread {
 									
 									Candidate candidate55 = new Candidate();
 									
-									candidate55.setIdCandidate(id);
+									candidate55.setIdCandidate(id5);
 									candidate55.setEmail(email5);
 			        				candidate55.setPassword(password5);
 			        				candidate55.setName(name5);
@@ -298,14 +329,36 @@ public class Servidor extends Thread {
 									out.println(jsonResposta5);
 									
 								} else {
-			        				
-									UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.INVALID_EMAIL);
-									String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
-									System.out.println(jsonResposta5);
-									out.println(jsonResposta5);
 									
-								}
-								
+									Connection conn55 = BancoDados.conectar();
+									Candidate candidate55 = new CandidateDAO(conn55).buscarPorCodigo(id5);
+									
+									if(email5.equals(candidate55.getEmail())) {
+										
+										Candidate candidate555 = new Candidate();
+										
+										candidate555.setIdCandidate(id5);
+										candidate555.setEmail(email5);
+				        				candidate555.setPassword(password5);
+				        				candidate555.setName(name5);
+				        				
+				        				Connection conn555 = BancoDados.conectar();
+				        				new CandidateDAO(conn555).atualizar(candidate555);
+										
+										UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.SUCCESS);
+										String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+										System.out.println(jsonResposta5);
+										out.println(jsonResposta5);
+										
+									} else {
+										
+										UpdateCandidateResposta mensagemUpdateEnviada = new UpdateCandidateResposta(update.getOperation(), Status.INVALID_EMAIL);
+										String jsonResposta5 = gson.toJson(mensagemUpdateEnviada);
+										System.out.println(jsonResposta5);
+										out.println(jsonResposta5);
+										
+									}
+								}	
 							}
 							
 						} catch(Exception e) {
@@ -316,22 +369,22 @@ public class Servidor extends Thread {
 							out.println(jsonResposta5);
 						}
 						
-
-						
 					break;
 					
 					case DELETE_ACCOUNT_CANDIDATE:
 						
 						DeleteCandidateRequisicao delete = gson.fromJson(json, DeleteCandidateRequisicao.class);
 						
+						System.out.println(delete.getToken());
+						
 						try {
 							
 							verifica.verify(delete.getToken());
 							Map<String, Claim> decoded5 = JWT.decode(delete.getToken()).getClaims();
-		                    int id = decoded5.get("id").asInt();
+		                    int id6 = decoded5.get("id").asInt();
 		                    
-		                    Connection conn = BancoDados.conectar();
-							new CandidateDAO(conn).excluir(id);
+		                    Connection conn6 = BancoDados.conectar();
+							new CandidateDAO(conn6).excluir(id6);
 							
 							DeleteCandidateResposta mensagemDeleteEnviada = new DeleteCandidateResposta(delete.getOperation(), Status.SUCCESS);
 							String jsonResposta6 = gson.toJson(mensagemDeleteEnviada);
