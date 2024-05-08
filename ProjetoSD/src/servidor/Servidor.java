@@ -21,6 +21,7 @@ import operacoes.DeleteCandidateResposta;
 import operacoes.LoginCandidateRequisicao;
 import operacoes.LoginCandidateResposta;
 import operacoes.LogoutCandidateRequisicao;
+import operacoes.LogoutCandidateResposta;
 import operacoes.LookUpCandidateRequisicao;
 import operacoes.LookUpCandidateResposta;
 import operacoes.Requisicao;
@@ -171,12 +172,12 @@ public class Servidor extends Thread {
 
 						LogoutCandidateRequisicao logout = gson.fromJson(json,  LogoutCandidateRequisicao.class);
 						
-						System.out.println(logout.getToken());
+						//System.out.println(logout.getToken());
 						
 						try{
 							verifica.verify(logout.getToken());
 							
-							LoginCandidateResposta mensagemLogoutEnviada = new LoginCandidateResposta(logout.getOperation(), Status.SUCCESS);
+							LogoutCandidateResposta mensagemLogoutEnviada = new LogoutCandidateResposta(logout.getOperation(), Status.SUCCESS);
 							String jsonResposta2 = gson.toJson(mensagemLogoutEnviada);
 							System.out.println(jsonResposta2);
 							out.println(jsonResposta2);
@@ -251,7 +252,7 @@ public class Servidor extends Thread {
 						
 						LookUpCandidateRequisicao lookUp = gson.fromJson(json, LookUpCandidateRequisicao.class);
 						
-						System.out.println(lookUp.getToken());
+						//System.out.println(lookUp.getToken());
 						
 						try {
 							verifica.verify(lookUp.getToken());
@@ -281,7 +282,7 @@ public class Servidor extends Thread {
 						
 						UpdateCandidateRequisicao update = gson.fromJson(json, UpdateCandidateRequisicao.class);
 						
-						System.out.println(update.getToken());
+						//System.out.println(update.getToken());
 						
 						try {
 							
@@ -375,7 +376,7 @@ public class Servidor extends Thread {
 						
 						DeleteCandidateRequisicao delete = gson.fromJson(json, DeleteCandidateRequisicao.class);
 						
-						System.out.println(delete.getToken());
+						//System.out.println(delete.getToken());
 						
 						try {
 							

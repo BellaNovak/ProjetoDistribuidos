@@ -109,6 +109,7 @@ public class Cliente {
         				LogoutCandidateResposta logoutResposta = gson.fromJson(in.readLine(), LogoutCandidateResposta.class);
         				String jsonRespostaLogout = gson.toJson(logoutResposta);
         				System.out.println("Resposta recebida: " + jsonRespostaLogout);
+        				token = null;
         				
         				System.out.print("Nova opção: ");
         			break;
@@ -187,6 +188,7 @@ public class Cliente {
         				DeleteCandidateResposta deleteResposta = gson.fromJson(in.readLine(), DeleteCandidateResposta.class);
         				String jsonRespostaDelete = gson.toJson(deleteResposta);
         				System.out.println("Resposta recebida: " + jsonRespostaDelete);
+        				token = null;
         				
         				System.out.print("Nova opção: ");
         			break;
