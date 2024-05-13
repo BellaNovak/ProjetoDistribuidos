@@ -73,7 +73,7 @@ public class CandidateDAO {
 			BancoDados.desconectar();
 		}
 	}
-	
+
 	public Candidate buscarPorCodigo(int codigoCandidate) throws SQLException {
 
 		PreparedStatement st = null;
@@ -82,7 +82,7 @@ public class CandidateDAO {
 		try {
 
 			st = conn.prepareStatement("select * from candidate where id_candidate = ?");
-			
+
 			st.setInt(1, codigoCandidate);
 
 			rs = st.executeQuery();
@@ -95,7 +95,7 @@ public class CandidateDAO {
 				candidate.setEmail(rs.getString("email"));
 				candidate.setPassword(rs.getString("password"));
 				candidate.setName(rs.getString("name"));
-				
+
 				return candidate;
 			}
 
@@ -108,8 +108,8 @@ public class CandidateDAO {
 			BancoDados.desconectar();
 		}
 	}
-	
-	public Candidate buscarPorEmail(String nomeCandidate) throws SQLException {
+
+	public Candidate buscarPorEmail(String emailCandidate) throws SQLException {
 
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -118,19 +118,18 @@ public class CandidateDAO {
 
 			st = conn.prepareStatement("select * from candidate where email = ?");
 
-			st.setString(1, nomeCandidate);
+			st.setString(1, emailCandidate);
 
 			rs = st.executeQuery();
 
 			if (rs.next()) {
 
 				Candidate candidate = new Candidate();
-				
+
 				candidate.setIdCandidate(rs.getInt("id_candidate"));
 				candidate.setEmail(rs.getString("email"));
 				candidate.setPassword(rs.getString("password"));
 				candidate.setName(rs.getString("name"));
-
 
 				return candidate;
 			}
@@ -167,7 +166,7 @@ public class CandidateDAO {
 		}
 	}
 
-	public int excluir(int codigo) throws SQLException {
+	public int excluir(int codigoCandidate) throws SQLException {
 
 		PreparedStatement st = null;
 
@@ -175,10 +174,10 @@ public class CandidateDAO {
 
 			st = conn.prepareStatement("delete from candidate where id_candidate = ?");
 
-			st.setInt(1, codigo);
+			st.setInt(1, codigoCandidate);
 
 			int linhasManipuladas = st.executeUpdate();
-			
+
 			return linhasManipuladas;
 
 		} finally {
