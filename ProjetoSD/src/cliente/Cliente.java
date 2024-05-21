@@ -10,7 +10,11 @@ import com.google.gson.GsonBuilder;
 import enumerations.Operacoes;
 import gui.ConexaoWindow;
 import gui.LoginCandidateWindow;
+import gui.OpcaoAreaWindow;
+import gui.OpcoesCandidateWindow;
+import gui.OpcoesRecruiterWindow;
 import gui.SignUpCandidateWindow;
+import gui.UpdateCandidateWindow;
 import operacoes.DeleteCandidateRequisicao;
 import operacoes.DeleteCandidateResposta;
 import operacoes.DeleteRecruiterRequisicao;
@@ -46,14 +50,18 @@ public class Cliente {
         conexao.setVisible(true);
         
         String serverHost = null;
-        while (serverHost == null) {
+        String porta = null;
+        while (serverHost == null && porta == null) {
             serverHost = conexao.getServerIp();
+            porta = conexao.getServerPorta();
             try {
                 Thread.sleep(100); 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }*/
+        }
+        
+        int serverPort = Integer.parseInt(porta);*/
 		
 		InetAddress serverHost = InetAddress.getLocalHost();
 		int serverPort = 21234;
@@ -94,12 +102,58 @@ public class Cliente {
         String userInput;
         Gson gson = new GsonBuilder().create();
         
-        System.out.println("1- Login candidato\n2- Logout candidato\n3- SignUp candidato\n4- LookUp candidato\n5- Update candidato\n6- Delete candidato\n");
+        System.out.println("1- Login candidato\n2- Logout candidato\n3- SignUp candidato\n4- LookUp candidato\n5- Update candidato\n6- Delete candidato");
         System.out.println("7- Login empresa\n8- Logout empresa\n9- SignUp empresa\n10- LookUp empresa\n11- Update empresa\n12- Delete empresa\n13- Finalizar\n");
         System.out.print("Digite a opcao: ");
         
         String token = null;
         String token1 = null;
+        
+        /*OpcaoAreaWindow opcaoAreaWindow = new OpcaoAreaWindow();
+        opcaoAreaWindow.setVisible(true);
+        
+        String opArea = null;
+        while (opArea == null) {
+            opArea = opcaoAreaWindow.getOpFinal();
+            try {
+                Thread.sleep(100); 
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        String op = null;
+        if(opArea.equals("1")) {
+        	
+        	OpcoesCandidateWindow opcaoCandidatoWindow = new OpcoesCandidateWindow();
+            opcaoCandidatoWindow.setVisible(true);
+            
+            while (op == null) {
+                op = opcaoCandidatoWindow.getOpFinal();
+                try {
+                    Thread.sleep(100); 
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            
+        } else {
+        	
+        	OpcoesRecruiterWindow opcaoEmpresaWindow = new OpcoesRecruiterWindow();
+            opcaoEmpresaWindow.setVisible(true);
+            
+            while (op == null) {
+                op = opcaoEmpresaWindow.getOpFinal();
+                try {
+                    Thread.sleep(100); 
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            
+        }
+        
+        userInput = op;*/
         
         while ((userInput = stdIn.readLine()) != null) {
         		
@@ -112,14 +166,14 @@ public class Cliente {
         				System.out.print("Digite a senha: ");
         				String password1 = stdIn.readLine();
         				
-        				/*LoginCandidateWindow loginWindow = new LoginCandidateWindow();
-        		        loginWindow.setVisible(true);
+        				/*LoginCandidateWindow loginCandidatoWindow = new LoginCandidateWindow();
+        		        loginCandidatoWindow.setVisible(true);
         				
         				String email1 = null;
         				String password1 = null;
         		        while (email1 == null && password1 == null) {
-        		            email1 = loginWindow.getEmail();
-        		            password1 = loginWindow.getPassword();
+        		            email1 = loginCandidatoWindow.getEmail();
+        		            password1 = loginCandidatoWindow.getPassword();
         		            try {
         		                Thread.sleep(100); 
         		            } catch (InterruptedException e) {
@@ -139,6 +193,21 @@ public class Cliente {
         				token = loginCandidatoResposta.getData().get("token"); 
         				
         				System.out.print("Nova opção: ");
+        				
+        				/*OpcoesCandidateWindow opcaoCandidatoWindow1 = new OpcoesCandidateWindow();
+        		        opcaoCandidatoWindow1.setVisible(true);
+        		        
+        		        String op1 = null;
+        		        while (op1 == null) {
+        		            op1 = opcaoCandidatoWindow1.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        userInput = op1;*/
                     
         			break;
                 
@@ -156,9 +225,56 @@ public class Cliente {
         				token = null;
         				
         				System.out.print("Nova opção: ");
+        				
+        				/*OpcaoAreaWindow opcaoAreaWindow2 = new OpcaoAreaWindow();
+        		        opcaoAreaWindow2.setVisible(true);
+        		        
+        		        String opArea2 = null;
+        		        while (opArea2 == null) {
+        		            opArea2 = opcaoAreaWindow2.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        String op2 = null;
+        		        if(opArea.equals("1")) {
+        		        	
+        		        	OpcoesCandidateWindow opcaoCandidatoWindow2 = new OpcoesCandidateWindow();
+        		            opcaoCandidatoWindow2.setVisible(true);
+        		            
+        		            while (op2 == null) {
+        		                op2 = opcaoCandidatoWindow2.getOpFinal();
+        		                try {
+        		                    Thread.sleep(100); 
+        		                } catch (InterruptedException e) {
+        		                    e.printStackTrace();
+        		                }
+        		            }
+        		            
+        		        } else {
+        		        	
+        		        	OpcoesRecruiterWindow opcaoEmpresaWindow2 = new OpcoesRecruiterWindow();
+        		            opcaoEmpresaWindow2.setVisible(true);
+        		            
+        		            while (op2 == null) {
+        		                op2 = opcaoEmpresaWindow2.getOpFinal();
+        		                try {
+        		                    Thread.sleep(100); 
+        		                } catch (InterruptedException e) {
+        		                    e.printStackTrace();
+        		                }
+        		            }
+        		            
+        		        }
+        		        
+        		        userInput = op2;*/
         			break;
                 
         			case "3":
+        				
         				System.out.print("Digite o email: ");
         				String email3 = stdIn.readLine();
                 	
@@ -168,16 +284,16 @@ public class Cliente {
         				System.out.print("Digite o nome: ");
         				String name3 = stdIn.readLine();
         				
-        				/*SignUpCandidateWindow signUpWindow = new SignUpCandidateWindow();
-        		        signUpWindow.setVisible(true);
+        				/*SignUpCandidateWindow signUpCandidatoWindow = new SignUpCandidateWindow();
+        		        signUpCandidatoWindow.setVisible(true);
         				
         				String email3 = null;
         				String password3 = null;
         				String name3 = null;
         		        while (email3 == null && password3 == null && name3 == null ) {
-        		            email3 = signUpWindow.getEmail();
-        		            password3 = signUpWindow.getPassword();
-        		            name3 = signUpWindow.getName();
+        		            email3 = signUpCandidatoWindow.getEmail();
+        		            password3 = signUpCandidatoWindow.getPassword();
+        		            name3 = signUpCandidatoWindow.getName();
         		            try {
         		                Thread.sleep(100); 
         		            } catch (InterruptedException e) {
@@ -196,6 +312,21 @@ public class Cliente {
         				System.out.println("Resposta recebida: " + jsonRespostaCandidatoSignUp);
         				
         				System.out.print("Nova opção: ");
+        				
+        				/*OpcoesCandidateWindow opcaoCandidatoWindow3 = new OpcoesCandidateWindow();
+        		        opcaoCandidatoWindow3.setVisible(true);
+        		        
+        		        String op3 = null;
+        		        while (op3 == null) {
+        		            op3 = opcaoCandidatoWindow3.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        userInput = op3;*/
         			break; 
                  
         			case "4":
@@ -211,6 +342,21 @@ public class Cliente {
         				System.out.println("Resposta recebida: " + jsonRespostaCandidatoLookUp);
         				
         				System.out.print("Nova opção: ");
+        				
+        				/*OpcoesCandidateWindow opcaoCandidatoWindow4 = new OpcoesCandidateWindow();
+        		        opcaoCandidatoWindow4.setVisible(true);
+        		        
+        		        String op4 = null;
+        		        while (op4 == null) {
+        		            op4 = opcaoCandidatoWindow4.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        userInput = op4;*/
         			break;
                  
         			case "5":
@@ -223,6 +369,23 @@ public class Cliente {
                 	
         				System.out.print("Digite o nome: ");
         				String name5 = stdIn.readLine();
+        				
+        				/*UpdateCandidateWindow updateCandidatoWindow = new UpdateCandidateWindow();
+        		        updateCandidatoWindow.setVisible(true);
+        				
+        				String email5 = null;
+        				String password5 = null;
+        				String name5 = null;
+        		        while (email5 == null && password5 == null && name5 == null ) {
+        		            email5 = updateCandidatoWindow.getEmail();
+        		            password5 = updateCandidatoWindow.getPassword();
+        		            name5 = updateCandidatoWindow.getName();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }*/
                 	
         				UpdateCandidateRequisicao updateCandidatoRequisicao = new UpdateCandidateRequisicao(Operacoes.UPDATE_ACCOUNT_CANDIDATE, token, email5, password5, name5);
         			
@@ -235,6 +398,21 @@ public class Cliente {
         				System.out.println("Resposta recebida: " + jsonRespostaCandidatoUpdate);
         				
         				System.out.print("Nova opção: ");
+        				
+        				/*OpcoesCandidateWindow opcaoCandidatoWindow5 = new OpcoesCandidateWindow();
+        		        opcaoCandidatoWindow1.setVisible(true);
+        		        
+        		        String op5 = null;
+        		        while (op5 == null) {
+        		            op5 = opcaoCandidatoWindow5.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        userInput = op5;*/
         				
         			break;
                  
@@ -252,6 +430,21 @@ public class Cliente {
         				//token = null;
         				
         				System.out.print("Nova opção: ");
+        				
+        				/*OpcoesCandidateWindow opcaoCandidatoWindow6 = new OpcoesCandidateWindow();
+        		        opcaoCandidatoWindow6.setVisible(true);
+        		        
+        		        String op6 = null;
+        		        while (op6 == null) {
+        		            op6 = opcaoCandidatoWindow6.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        userInput = op6;*/
         			break;
         			
         			case "7":
@@ -262,14 +455,14 @@ public class Cliente {
         				System.out.print("Digite a senha: ");
         				String password7 = stdIn.readLine();
         				
-        				/*LoginCandidateWindow loginWindow = new LoginCandidateWindow();
-        		        loginWindow.setVisible(true);
+        				/*LoginRecruiterWindow loginEmpresaWindow = new LoginRecruiterWindow();
+        		        loginEmpresaWindow.setVisible(true);
         				
-        				String email1 = null;
-        				String password1 = null;
-        		        while (email1 == null && password1 == null) {
-        		            email1 = loginWindow.getEmail();
-        		            password1 = loginWindow.getPassword();
+        				String email7 = null;
+        				String password7 = null;
+        		        while (email7 == null && password7 == null) {
+        		            email7 = loginEmpresaWindow.getEmail();
+        		            password7 = loginEmpresaWindow.getPassword();
         		            try {
         		                Thread.sleep(100); 
         		            } catch (InterruptedException e) {
@@ -290,6 +483,21 @@ public class Cliente {
         				
         				System.out.print("Nova opção: ");
         				
+        				/*OpcoesRecruiterWindow opcaoEmpresaWindow7 = new OpcoesRecruiterWindow();
+        		        opcaoEmpresaWindow7.setVisible(true);
+        		        
+        		        String op7 = null;
+        		        while (op7 == null) {
+        		            op7 = opcaoEmpresaWindow7.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        userInput = op7;*/
+        				
         			break;
         			
         			case "8": 
@@ -306,6 +514,52 @@ public class Cliente {
         				token1 = null;
         				
         				System.out.print("Nova opção: ");
+        				
+        				/*OpcaoAreaWindow opcaoAreaWindow8 = new OpcaoAreaWindow();
+        		        opcaoAreaWindow8.setVisible(true);
+        		        
+        		        String opArea8 = null;
+        		        while (opArea8 == null) {
+        		            opArea8 = opcaoAreaWindow2.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        String op8 = null;
+        		        if(opArea.equals("1")) {
+        		        	
+        		        	OpcoesCandidateWindow opcaoCandidatoWindow8 = new OpcoesCandidateWindow();
+        		            opcaoCandidatoWindow8.setVisible(true);
+        		            
+        		            while (op8 == null) {
+        		                op8 = opcaoCandidatoWindow8.getOpFinal();
+        		                try {
+        		                    Thread.sleep(100); 
+        		                } catch (InterruptedException e) {
+        		                    e.printStackTrace();
+        		                }
+        		            }
+        		            
+        		        } else {
+        		        	
+        		        	OpcoesRecruiterWindow opcaoEmpresaWindow8 = new OpcoesRecruiterWindow();
+        		            opcaoEmpresaWindow8.setVisible(true);
+        		            
+        		            while (op8 == null) {
+        		                op8 = opcaoEmpresaWindow8.getOpFinal();
+        		                try {
+        		                    Thread.sleep(100); 
+        		                } catch (InterruptedException e) {
+        		                    e.printStackTrace();
+        		                }
+        		            }
+        		            
+        		        }
+        		        
+        		        userInput = op8;*/
         				
         			break;	
         			
@@ -326,16 +580,20 @@ public class Cliente {
         				System.out.print("Digite a descrição: ");
         				String description9 = stdIn.readLine();
         				
-        				/*SignUpCandidateWindow signUpWindow = new SignUpCandidateWindow();
-        		        signUpWindow.setVisible(true);
+        				/*SignUpRecruiterWindow signUpEmpresaWindow = new SignUpRecruiterWindow();
+        		        signUpEmpresaWindow.setVisible(true);
         				
-        				String email3 = null;
-        				String password3 = null;
-        				String name3 = null;
-        		        while (email3 == null && password3 == null && name3 == null ) {
-        		            email3 = signUpWindow.getEmail();
-        		            password3 = signUpWindow.getPassword();
-        		            name3 = signUpWindow.getName();
+        				String email9 = null;
+        				String password9 = null;
+        				String name9 = null;
+        				String industry9 = null;
+        				String description9 = null;
+        		        while (email9 == null && password9 == null && name9 == null && industry9 == null && description9 == null) {
+        		            email9 = signUpEmpresaWindow.getEmail();
+        		            password9 = signUpEmpresaWindow.getPassword();
+        		            name9 = signUpEmpresaWindow.getName();
+        		            industry9 = signUpEmpresaWindow.getIndustry();
+        		            description9 = signUpEmpresaWindow.gerDescription();
         		            try {
         		                Thread.sleep(100); 
         		            } catch (InterruptedException e) {
@@ -355,6 +613,21 @@ public class Cliente {
         				
         				System.out.print("Nova opção: ");
         				
+        				/*OpcoesRecruiterWindow opcaoEmpresaWindow9 = new OpcoesCandidateWindow();
+        		        opcaoEmpresaWindow9.setVisible(true);
+        		        
+        		        String op9 = null;
+        		        while (op9 == null) {
+        		            op9 = opcaoEmpresaWindow9.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        userInput = op9;*/
+        				
         			break;	
         			
         			case "10": 
@@ -370,6 +643,21 @@ public class Cliente {
         				System.out.println("Resposta recebida: " + jsonRespostaEmpresaLookUp);
         				
         				System.out.print("Nova opção: ");
+        				
+        				/*OpcoesRecruiterWindow opcaoEmpresaWindow10 = new OpcoesCandidateWindow();
+        		        opcaoEmpresaWindow10.setVisible(true);
+        		        
+        		        String op10 = null;
+        		        while (op10 == null) {
+        		            op10 = opcaoEmpresaWindow10.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        userInput = op10;*/
         				
         			break;
         			
@@ -389,6 +677,27 @@ public class Cliente {
         				
         				System.out.print("Digite a descrição: ");
         				String description11 = stdIn.readLine();
+        				
+        				/*UpdateRecruiterWindow updateEmpresaWindow = new UpdateRecruiterWindow();
+        		        updateEmpresaWindow.setVisible(true);
+        				
+        				String email11 = null;
+        				String password11 = null;
+        				String name11 = null;
+        		        String industry11 = null;
+        				String description11 = null;
+        		        while (email11 == null && password11 == null && name11 == null && industry11 == null && description11 == null) {
+        		            email11 = updateEmpresaWindow.getEmail();
+        		            password11 = updateEmpresaWindow.getPassword();
+        		            name11 = updateEmpresaWindow.getName();
+        		            industry11 = updateUpEmpresaWindow.getIndustry();
+        		            description11 = updateEmpresaWindow.gerDescription();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }*/
                 	
         				UpdateRecruiterRequisicao updateEmpresaRequisicao = new UpdateRecruiterRequisicao(Operacoes.UPDATE_ACCOUNT_RECRUITER, token1, email11, password11, name11, industry11, description11);
         			
@@ -401,6 +710,21 @@ public class Cliente {
         				System.out.println("Resposta recebida: " + jsonRespostaEmpresaUpdate);
         				
         				System.out.print("Nova opção: ");
+        				
+        				/*OpcoesRecruiterWindow opcaoEmpresaWindow11 = new OpcoesCandidateWindow();
+        		        opcaoEmpresaWindow11.setVisible(true);
+        		        
+        		        String op11 = null;
+        		        while (op11 == null) {
+        		            op11 = opcaoEmpresaWindow11.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        userInput = op11;*/
         				
         			break;
         			
@@ -418,6 +742,21 @@ public class Cliente {
         				//token1 = null;
         				
         				System.out.print("Nova opção: ");
+        				
+        				/*OpcoesRecruiterWindow opcaoEmpresaWindow12 = new OpcoesCandidateWindow();
+        		        opcaoEmpresaWindow12.setVisible(true);
+        		        
+        		        String op12 = null;
+        		        while (op12 == null) {
+        		            op12 = opcaoEmpresaWindow12.getOpFinal();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
+        		        
+        		        userInput = op12;*/
         				
         			break;	
         					

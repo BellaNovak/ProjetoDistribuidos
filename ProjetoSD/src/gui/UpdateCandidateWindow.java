@@ -16,8 +16,8 @@ import javax.swing.border.EmptyBorder;
 
 import lombok.Getter;
 
-public class SignUpCandidateWindow extends JDialog {
-	
+public class UpdateCandidateWindow extends JDialog {
+
 	@Getter
 	private String email;
 	@Getter
@@ -36,11 +36,11 @@ public class SignUpCandidateWindow extends JDialog {
 	private JPanel buttonPane;
 	private JTextField txtName;
 	private JLabel lblName;
-
+	
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			SignUpCandidateWindow dialog = new SignUpCandidateWindow();
+			UpdateCandidateWindow dialog = new UpdateCandidateWindow();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -48,9 +48,9 @@ public class SignUpCandidateWindow extends JDialog {
 		}
 	}
 
-	public SignUpCandidateWindow() {
+	public UpdateCandidateWindow() {
 		
-		setTitle("Cadastro do candidato");
+		setTitle("Update do candidato");
 		setBounds(100, 100, 458, 230);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -84,7 +84,7 @@ public class SignUpCandidateWindow extends JDialog {
 		
 		lblName = new JLabel("Nome:");
 		lblName.setFont(new Font("Arial", Font.PLAIN, 15));
-		lblName.setBounds(76, 130, 59, 22);
+		lblName.setBounds(76, 128, 59, 22);
 		contentPanel.add(lblName);
 
 		buttonPane = new JPanel();
@@ -112,7 +112,6 @@ public class SignUpCandidateWindow extends JDialog {
 		});
 		btnCancelar.setActionCommand("Cancel");
 		buttonPane.add(btnCancelar);
-
 	}
-}
 
+}

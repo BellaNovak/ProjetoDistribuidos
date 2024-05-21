@@ -16,14 +16,12 @@ import javax.swing.border.EmptyBorder;
 
 import lombok.Getter;
 
-public class SignUpCandidateWindow extends JDialog {
-	
+public class LoginRecruiterWindow extends JDialog {
+
 	@Getter
 	private String email;
 	@Getter
 	private String password;
-	@Getter
-	private String name;
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -34,13 +32,11 @@ public class SignUpCandidateWindow extends JDialog {
 	private JButton btnOk;
 	private JButton btnCancelar;
 	private JPanel buttonPane;
-	private JTextField txtName;
-	private JLabel lblName;
-
+	
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			SignUpCandidateWindow dialog = new SignUpCandidateWindow();
+			LoginRecruiterWindow dialog = new LoginRecruiterWindow();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -48,10 +44,10 @@ public class SignUpCandidateWindow extends JDialog {
 		}
 	}
 
-	public SignUpCandidateWindow() {
+	public LoginRecruiterWindow() {
 		
-		setTitle("Cadastro do candidato");
-		setBounds(100, 100, 458, 230);
+		setTitle("Login da empresa");
+		setBounds(100, 100, 458, 194);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -76,16 +72,6 @@ public class SignUpCandidateWindow extends JDialog {
 		lblPassword.setFont(new Font("Arial", Font.PLAIN, 15));
 		lblPassword.setBounds(76, 77, 59, 22);
 		contentPanel.add(lblPassword);
-		
-		txtName = new JTextField();
-		txtName.setColumns(10);
-		txtName.setBounds(145, 129, 144, 23);
-		contentPanel.add(txtName);
-		
-		lblName = new JLabel("Nome:");
-		lblName.setFont(new Font("Arial", Font.PLAIN, 15));
-		lblName.setBounds(76, 130, 59, 22);
-		contentPanel.add(lblName);
 
 		buttonPane = new JPanel();
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -96,7 +82,6 @@ public class SignUpCandidateWindow extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				email = txtEmail.getText();
 				password = txtPassword.getText();
-				name = txtName.getText();
 				dispose();
 			}
 		});
@@ -112,7 +97,6 @@ public class SignUpCandidateWindow extends JDialog {
 		});
 		btnCancelar.setActionCommand("Cancel");
 		buttonPane.add(btnCancelar);
-
 	}
-}
 
+}
