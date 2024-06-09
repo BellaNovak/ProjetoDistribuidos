@@ -109,9 +109,9 @@ public class RecruiterDAOTeste {
 		try {
 
 			//RecruiterDAOTeste.cadastrarRecruiterTeste();
-			//RecruiterDAOTeste. buscarTodosRecruiterTeste();
+			RecruiterDAOTeste. buscarTodosRecruiterTeste();
 			//RecruiterDAOTeste.buscarPorCodigoTeste();
-			RecruiterDAOTeste.buscarPorEmailTeste();
+			//RecruiterDAOTeste.buscarPorEmailTeste();
 			//RecruiterDAOTeste.atualizarRecruiterTeste();
 			//RecruiterDAOTeste.excluirRecruiterTeste();
 

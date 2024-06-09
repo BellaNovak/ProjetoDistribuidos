@@ -6,13 +6,13 @@ import enumerations.Operacoes;
 import enumerations.Status;
 import lombok.Getter;
 
-public class UpdateRecruiterResposta extends Resposta{
+public class IncludeJobResposta extends Resposta{
 	
 	@Getter
 	private TreeMap<String, String> data = new TreeMap<String, String>();
 	
-	public UpdateRecruiterResposta(Operacoes operation, Status status) {
+	public IncludeJobResposta(Operacoes operation, Status status) {
 		super(operation, status);
 	}
-	
+
 }

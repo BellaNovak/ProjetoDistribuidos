@@ -35,7 +35,7 @@ public class CandidateDAOTeste {
 	
 	public static void buscarPorCodigoTeste() throws SQLException, IOException {
 
-		int codigoCandidate = 2;
+		int codigoCandidate = 5;
 
 		Connection conn = BancoDados.conectar();
 		Candidate candidate = new CandidateDAO(conn).buscarPorCodigo(codigoCandidate);
@@ -105,9 +105,9 @@ public class CandidateDAOTeste {
 		try {
 
 			//CandidateDAOTeste.cadastrarCandidateTeste();
-			//CandidateDAOTeste. buscarTodosCandidateTeste();
+			CandidateDAOTeste. buscarTodosCandidateTeste();
 			//CandidateDAOTeste.buscarPorCodigoTeste();
-			CandidateDAOTeste.buscarPorEmailTeste();
+			//CandidateDAOTeste.buscarPorEmailTeste();
 			//CandidateDAOTeste.atualizarCandidateTeste();
 			//CandidateDAOTeste.excluirCandidateTeste();
 

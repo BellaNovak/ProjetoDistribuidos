@@ -19,6 +19,10 @@ import operacoes.DeleteCandidateRequisicao;
 import operacoes.DeleteCandidateResposta;
 import operacoes.DeleteRecruiterRequisicao;
 import operacoes.DeleteRecruiterResposta;
+import operacoes.DeleteSkillRequisicao;
+import operacoes.DeleteSkillResposta;
+import operacoes.IncludeSkillRequisicao;
+import operacoes.IncludeSkillResposta;
 import operacoes.LoginCandidateRequisicao;
 import operacoes.LoginCandidateResposta;
 import operacoes.LoginRecruiterRequisicao;
@@ -30,6 +34,8 @@ import operacoes.LogoutRecruiterResposta;
 import operacoes.LookUpCandidateRequisicao;
 import operacoes.LookUpCandidateResposta;
 import operacoes.LookUpRecruiterRequisicao;
+import operacoes.LookUpSkillRequisicao;
+import operacoes.LookUpSkillResposta;
 import operacoes.RequisicaoInvalida;
 import operacoes.RespostaInvalida;
 import operacoes.SignUpCandidateRequisicao;
@@ -40,6 +46,8 @@ import operacoes.UpdateCandidateRequisicao;
 import operacoes.UpdateCandidateResposta;
 import operacoes.UpdateRecruiterRequisicao;
 import operacoes.UpdateRecruiterResposta;
+import operacoes.UpdateSkillRequisicao;
+import operacoes.UpdateSkillResposta;
 
 public class Cliente {
 	
@@ -103,7 +111,8 @@ public class Cliente {
         Gson gson = new GsonBuilder().create();
         
         System.out.println("1- Login candidato\n2- Logout candidato\n3- SignUp candidato\n4- LookUp candidato\n5- Update candidato\n6- Delete candidato");
-        System.out.println("7- Login empresa\n8- Logout empresa\n9- SignUp empresa\n10- LookUp empresa\n11- Update empresa\n12- Delete empresa\n13- Finalizar\n");
+        System.out.println("7- Login empresa\n8- Logout empresa\n9- SignUp empresa\n10- LookUp empresa\n11- Update empresa\n12- Delete empresa");
+        System.out.println("13- Include competência\n14- LookUp competência\n15- Update competência\n16- Delete competência\n20- Finalizar\n");
         System.out.print("Digite a opcao: ");
         
         String token = null;
@@ -758,9 +767,96 @@ public class Cliente {
         		        
         		        userInput = op12;*/
         				
-        			break;	
-        					
+        			break;
+        			
         			case "13":
+        				
+        				System.out.print("Digite a competência: ");
+        				String skill13 = stdIn.readLine();
+                	
+        				System.out.print("Digite a experiência: ");
+        				String experience13 = stdIn.readLine();
+        				
+        				IncludeSkillRequisicao includeCompetenciaRequisicao = new IncludeSkillRequisicao(Operacoes.INCLUDE_SKILL, token, skill13, experience13);
+            			
+        				String jsonRequisicaoCompetenciaInclude = gson.toJson(includeCompetenciaRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoCompetenciaInclude);
+        				out.println(jsonRequisicaoCompetenciaInclude);
+                    
+        				IncludeSkillResposta includeCompetenciaResposta = gson.fromJson(in.readLine(), IncludeSkillResposta.class);
+        				String jsonRespostaCompetenciaInclude = gson.toJson(includeCompetenciaResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaCompetenciaInclude);
+        				
+        				System.out.print("Nova opção: ");
+        				
+        			break;
+        				
+        			case "14":
+        				
+        				System.out.print("Digite a competência: ");
+        				String skill14 = stdIn.readLine();
+        				
+        				LookUpSkillRequisicao lookUpCompetenciaRequisicao = new LookUpSkillRequisicao(Operacoes.LOOKUP_SKILL, token, skill14);
+            			
+        				String jsonRequisicaoCompetenciaLookUp = gson.toJson(lookUpCompetenciaRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoCompetenciaLookUp);
+        				out.println(jsonRequisicaoCompetenciaLookUp);
+                    
+        				LookUpSkillResposta lookUpCompetenciaResposta = gson.fromJson(in.readLine(), LookUpSkillResposta.class);
+        				String jsonRespostaCompetenciaLookUp = gson.toJson(lookUpCompetenciaResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaCompetenciaLookUp);
+        				
+        				System.out.print("Nova opção: ");
+        				
+        			break;
+        			
+        			case "15":
+        				
+        				System.out.print("Digite a competência para atualizar: ");
+        				String skill15 = stdIn.readLine();
+                	
+        				System.out.print("Digite a experiência: ");
+        				String experience15 = stdIn.readLine();
+        				
+        				System.out.print("Digite a nova competência: ");
+        				String newSkill15 = stdIn.readLine();
+        				
+        				UpdateSkillRequisicao updateCompetenciaRequisicao = new UpdateSkillRequisicao(Operacoes.UPDATE_SKILL, token, skill15, experience15, newSkill15);
+            			
+        				String jsonRequisicaoCompetenciaUpdate = gson.toJson(updateCompetenciaRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoCompetenciaUpdate);
+        				out.println(jsonRequisicaoCompetenciaUpdate);
+                    
+        				UpdateSkillResposta updateCompetenciaResposta = gson.fromJson(in.readLine(), UpdateSkillResposta.class);
+        				String jsonRespostaCompetenciaUpdate = gson.toJson(updateCompetenciaResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaCompetenciaUpdate);
+        				
+        				System.out.print("Nova opção: ");
+        				
+        			break;	
+        				
+        				
+        			case "16":
+        				
+        				System.out.print("Digite a competência: ");
+        				String skill16 = stdIn.readLine();
+        				
+        				DeleteSkillRequisicao deleteCompetenciaRequisicao = new DeleteSkillRequisicao(Operacoes.DELETE_SKILL, token, skill16);
+            			
+        				String jsonRequisicaoCompetenciaDelete = gson.toJson(deleteCompetenciaRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoCompetenciaDelete);
+        				out.println(jsonRequisicaoCompetenciaDelete);
+                    
+        				DeleteSkillResposta deleteCompetenciaResposta = gson.fromJson(in.readLine(), DeleteSkillResposta.class);
+        				String jsonRespostaCompetenciaDelete = gson.toJson(deleteCompetenciaResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaCompetenciaDelete);
+        				
+        				System.out.print("Nova opção: ");
+        				
+        				break;
+        				
+        				
+        			case "20":
         				return;
         			
         			default:

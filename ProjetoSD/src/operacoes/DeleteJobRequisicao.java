@@ -3,16 +3,16 @@ package operacoes;
 import java.util.TreeMap;
 
 import enumerations.Operacoes;
-import enumerations.Status;
 import lombok.Getter;
 
-public class UpdateRecruiterResposta extends Resposta{
+public class DeleteJobRequisicao extends Requisicao{
 	
 	@Getter
 	private TreeMap<String, String> data = new TreeMap<String, String>();
 	
-	public UpdateRecruiterResposta(Operacoes operation, Status status) {
-		super(operation, status);
+	public DeleteJobRequisicao(Operacoes operation, String token, String skill) {
+		super(operation, token);
+		data.put("skill", skill);
 	}
-	
+
 }
