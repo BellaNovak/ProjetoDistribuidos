@@ -39,7 +39,7 @@ public class SkillDAOTeste {
 	
 	public static void buscarPorNomeTeste() throws SQLException, IOException {
 
-		String skillNome = "HTML";
+		String skillNome = "Python";
 
 		Connection conn = BancoDados.conectar();
 		Skill skill = new SkillDAO(conn).buscarPorNome(skillNome);
@@ -51,7 +51,7 @@ public class SkillDAOTeste {
 
 		} else {
 
-			System.out.println("Email não encontrado.");
+			System.out.println("Competência não encontrada.");
 		}
 	}
 	

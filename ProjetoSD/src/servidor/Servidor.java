@@ -5,7 +5,7 @@ import java.net.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.TreeMap;
-
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -13,10 +13,12 @@ import com.google.gson.GsonBuilder;
 
 import dao.BancoDados;
 import dao.CandidateDAO;
+import dao.JobsetDAO;
 import dao.RecruiterDAO;
 import dao.SkillDAO;
 import dao.SkillsetDAO;
 import entities.Candidate;
+import entities.Jobset;
 import entities.Recruiter;
 import entities.Skill;
 import entities.Skillset;
@@ -24,10 +26,14 @@ import enumerations.Role;
 import enumerations.Status;
 import operacoes.DeleteCandidateRequisicao;
 import operacoes.DeleteCandidateResposta;
+import operacoes.DeleteJobRequisicao;
+import operacoes.DeleteJobResposta;
 import operacoes.DeleteRecruiterRequisicao;
 import operacoes.DeleteRecruiterResposta;
 import operacoes.DeleteSkillRequisicao;
 import operacoes.DeleteSkillResposta;
+import operacoes.IncludeJobRequisicao;
+import operacoes.IncludeJobResposta;
 import operacoes.IncludeSkillRequisicao;
 import operacoes.IncludeSkillResposta;
 import operacoes.LoginCandidateRequisicao;
@@ -40,19 +46,29 @@ import operacoes.LogoutRecruiterRequisicao;
 import operacoes.LogoutRecruiterResposta;
 import operacoes.LookUpCandidateRequisicao;
 import operacoes.LookUpCandidateResposta;
+import operacoes.LookUpJobRequisicao;
+import operacoes.LookUpJobResposta;
+import operacoes.LookUpJobsetRequisicao;
+import operacoes.LookUpJobsetResposta;
 import operacoes.LookUpRecruiterRequisicao;
 import operacoes.LookUpRecruiterResposta;
 import operacoes.LookUpSkillRequisicao;
 import operacoes.LookUpSkillResposta;
+import operacoes.LookUpSkillsetRequisicao;
+import operacoes.LookUpSkillsetResposta;
 import operacoes.Requisicao;
 import operacoes.RequisicaoInvalida;
 import operacoes.RespostaInvalida;
+import operacoes.SearchJobRequisicao;
+import operacoes.SearchJobResposta;
 import operacoes.SignUpCandidateRequisicao;
 import operacoes.SignUpCandidateResposta;
 import operacoes.SignUpRecruiterRequisicao;
 import operacoes.SignUpRecruiterResposta;
 import operacoes.UpdateCandidateRequisicao;
 import operacoes.UpdateCandidateResposta;
+import operacoes.UpdateJobRequisicao;
+import operacoes.UpdateJobResposta;
 import operacoes.UpdateRecruiterRequisicao;
 import operacoes.UpdateRecruiterResposta;
 import operacoes.UpdateSkillRequisicao;
@@ -296,8 +312,7 @@ public class Servidor extends Thread {
 							String jsonResposta4 = gson.toJson(mensagemTokenEnviada);
 							System.out.println(jsonResposta4);
 							out.println(jsonResposta4);
-						}
-						
+						}	
 						
 					break;
 					
@@ -812,7 +827,7 @@ public class Servidor extends Thread {
 							out.println(jsonResposta13);
 						}
 						
-						break;
+					break;
 					
 					case LOOKUP_SKILL:
 						
@@ -992,7 +1007,7 @@ public class Servidor extends Thread {
 							out.println(jsonResposta15);
 						}
 						
-						break;
+					break;
 					
 					case DELETE_SKILL:
 						
@@ -1064,7 +1079,433 @@ public class Servidor extends Thread {
 						}
 						
 					break;	
+					
+					case LOOKUP_SKILLSET:
 						
+						LookUpSkillsetRequisicao lookUpSkillset = gson.fromJson(json, LookUpSkillsetRequisicao.class);
+						
+						System.out.println(lookUpSkillset.getToken());
+						
+						try {
+							verifica.verify(lookUpSkillset.getToken());
+							Map<String, Claim> decoded = JWT.decode(lookUpSkillset.getToken()).getClaims();
+		                    int id21 = decoded.get("id").asInt();
+
+							Connection conn21 = BancoDados.conectar();
+							SkillsetDAO skillset21 = new SkillsetDAO(conn21);
+							List<Map<String, String>> skills21 = skillset21.buscarHabilidadesPorCandidate(id21);
+							
+							LookUpSkillsetResposta mensagemLookUpEnviada = new LookUpSkillsetResposta(lookUpSkillset.getOperation(), Status.SUCCESS, skills21);
+							String jsonResposta21 = gson.toJson(mensagemLookUpEnviada);
+							System.out.println(jsonResposta21);
+							out.println(jsonResposta21);
+							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(lookUpSkillset.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta21 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta21);
+							out.println(jsonResposta21);
+						}
+						
+					break;	
+					
+					case INCLUDE_JOB:
+						
+						IncludeJobRequisicao includeVaga = gson.fromJson(json, IncludeJobRequisicao.class);
+						
+						System.out.println(includeVaga.getToken());
+						
+						try {
+							
+							verifica.verify(includeVaga.getToken());
+							Map<String, Claim> decoded = JWT.decode(includeVaga.getToken()).getClaims();
+		                    int id17 = decoded.get("id").asInt();
+		                    
+		                    TreeMap<String, String> data17 = (TreeMap<String,String>) includeVaga.getData();
+							
+							String skill17 = data17.get("skill");
+							String experience17 = data17.get("experience");
+							
+							System.out.println(skill17);
+							System.out.println(experience17);
+							
+							Connection conn17 = BancoDados.conectar();
+							Skill skillNome17 = new SkillDAO(conn17).buscarPorNome(skill17);
+							
+							if(skill17.trim().equals("")|| experience17.trim().equals("")) {
+								
+								RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(includeVaga.getOperation(), Status.INVALID_FIELD);
+								String jsonResposta17 = gson.toJson(mensagemNulaEnviada);
+								System.out.println(jsonResposta17);
+								out.println(jsonResposta17);
+								
+							} else {
+								
+								if (skillNome17 != null) {
+									
+									Connection conn = BancoDados.conectar();
+									Jobset jobset17 = new JobsetDAO(conn).buscarEspecifica(id17, skillNome17.getIdSkill());
+									
+									if(jobset17 != null) {
+										
+										IncludeJobResposta mensagemIncludeEnviada = new IncludeJobResposta(includeVaga.getOperation(), Status.JOB_EXISTS);
+										String jsonResposta17 = gson.toJson(mensagemIncludeEnviada);
+										System.out.println(jsonResposta17);
+										out.println(jsonResposta17);
+										
+									} else {
+										
+										Skill skill1717 = new Skill();
+										skill1717.setIdSkill(skillNome17.getIdSkill());
+										
+										Recruiter recruiter17 = new Recruiter();
+										recruiter17.setIdRecruiter(id17);
+										
+										Jobset jobset1717 = new Jobset();
+										jobset1717.setExperience(experience17);
+										jobset1717.setSkill(skill1717);
+										jobset1717.setRecruiter(recruiter17);
+
+				        				Connection conn1717 = BancoDados.conectar();
+				        				new JobsetDAO(conn1717).cadastrar(jobset1717);
+				        				
+										IncludeJobResposta mensagemIncludeEnviada = new IncludeJobResposta(includeVaga.getOperation(), Status.SUCCESS);
+										String jsonResposta17 = gson.toJson(mensagemIncludeEnviada);
+										System.out.println(jsonResposta17);
+										out.println(jsonResposta17);
+										
+									}
+										
+								} else {
+									IncludeJobResposta mensagemIncludeEnviada = new IncludeJobResposta(includeVaga.getOperation(), Status.SKILL_NOT_EXISTS);
+									String jsonResposta17 = gson.toJson(mensagemIncludeEnviada);
+									System.out.println(jsonResposta17);
+									out.println(jsonResposta17);
+								}
+								
+							}
+							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(includeVaga.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta17 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta17);
+							out.println(jsonResposta17);
+						}
+						
+					break;
+					
+					case LOOKUP_JOB:
+						
+						LookUpJobRequisicao lookUpVaga = gson.fromJson(json, LookUpJobRequisicao.class);
+						
+						System.out.println(lookUpVaga.getToken());
+						
+						try {
+							
+							verifica.verify(lookUpVaga.getToken());
+							Map<String, Claim> decoded = JWT.decode(lookUpVaga.getToken()).getClaims();
+		                    int id18 = decoded.get("id").asInt();
+		                    
+		                    TreeMap<String, String> data18 = (TreeMap<String,String>) lookUpVaga.getData();
+							
+							String idSkill18 = data18.get("id");
+							
+							System.out.println(idSkill18);
+							
+							Connection conn18 = BancoDados.conectar();
+							Skill idSkillBusca18 = new SkillDAO(conn18).buscarPorCodigo(Integer.parseInt(idSkill18));
+							
+							if(idSkill18.trim().equals("")) {
+								
+								RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(lookUpVaga.getOperation(), Status.INVALID_FIELD);
+								String jsonResposta18 = gson.toJson(mensagemNulaEnviada);
+								System.out.println(jsonResposta18);
+								out.println(jsonResposta18);
+								
+							} else {
+								
+								if (idSkillBusca18 != null) {
+									
+									Connection conn1818 = BancoDados.conectar();
+									Jobset jobset18 = new JobsetDAO(conn1818).buscarEspecifica(id18, Integer.parseInt(idSkill18));
+									
+									if(jobset18 != null)
+									{
+										LookUpJobResposta mensagemLookUpEnviada = new LookUpJobResposta(lookUpVaga.getOperation(), Status.SUCCESS, idSkillBusca18.getSkill(), jobset18.getExperience(),idSkill18);
+										String jsonResposta18 = gson.toJson(mensagemLookUpEnviada);
+										System.out.println(jsonResposta18);
+										out.println(jsonResposta18);
+										
+									} else {
+										
+										LookUpJobResposta mensagemLookUpEnviada = new LookUpJobResposta(lookUpVaga.getOperation(), Status.JOB_NOT_FOUND);
+										String jsonResposta18 = gson.toJson(mensagemLookUpEnviada);
+										System.out.println(jsonResposta18);
+										out.println(jsonResposta18);
+										
+									}
+				        				
+								} else {
+									LookUpJobResposta mensagemLookUpEnviada = new LookUpJobResposta(lookUpVaga.getOperation(), Status.SKILL_NOT_EXISTS);
+									String jsonResposta18 = gson.toJson(mensagemLookUpEnviada);
+									System.out.println(jsonResposta18);
+									out.println(jsonResposta18);
+								}
+								
+							}
+							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(lookUpVaga.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta18 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta18);
+							out.println(jsonResposta18);
+						}
+						
+					break;	
+					
+					case UPDATE_JOB:
+						
+						UpdateJobRequisicao updateVaga = gson.fromJson(json, UpdateJobRequisicao.class);
+						
+						System.out.println(updateVaga.getToken());
+						
+						try {
+							
+							verifica.verify(updateVaga.getToken());
+							Map<String, Claim> decoded = JWT.decode(updateVaga.getToken()).getClaims();
+		                    int id19 = decoded.get("id").asInt();
+		                    
+		                    TreeMap<String, String> data19 = (TreeMap<String,String>) updateVaga.getData();
+							
+		                    String idSkill19 = data19.get("id");
+							String skill19 = data19.get("skill");
+							String experience19 = data19.get("experience");
+							
+							System.out.println(idSkill19);
+							System.out.println(skill19);
+							System.out.println(experience19);
+							
+							
+							Connection conn19 = BancoDados.conectar();
+							Skill skillNome19 = new SkillDAO(conn19).buscarPorNome(skill19);
+							
+							Connection conn199 = BancoDados.conectar();
+							Skill idSkillBusca19 = new SkillDAO(conn199).buscarPorCodigo(Integer.parseInt(idSkill19));
+							
+							if(skill19.trim().equals("")|| experience19.trim().equals("") || idSkill19.trim().equals("")) {
+								
+								RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(updateVaga.getOperation(), Status.INVALID_FIELD);
+								String jsonResposta19 = gson.toJson(mensagemNulaEnviada);
+								System.out.println(jsonResposta19);
+								out.println(jsonResposta19);
+								
+							} else {
+								
+								if (skillNome19 != null && idSkillBusca19 != null) {
+									
+									Connection conn1919 = BancoDados.conectar();
+									Jobset jobset19 = new JobsetDAO(conn1919).buscarEspecifica(id19, skillNome19.getIdSkill());
+									
+									Connection conn19199 = BancoDados.conectar();
+									Jobset newJobset19 = new JobsetDAO(conn19199).buscarEspecifica(id19, Integer.parseInt(idSkill19));
+									
+									
+									if(jobset19 != null) {
+										
+										if(Integer.parseInt(idSkill19) == skillNome19.getIdSkill()) {
+
+											Connection conn191919 = BancoDados.conectar();
+											new JobsetDAO(conn191919).atualizar(Integer.parseInt(idSkill19), experience19, id19, skillNome19.getIdSkill());
+											
+											UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.SUCCESS);
+											String jsonResposta19 = gson.toJson(mensagemUpdateEnviada);
+											System.out.println(jsonResposta19);
+											out.println(jsonResposta19);
+											
+										} else {
+											
+											if(newJobset19 != null) {
+												
+												UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.JOB_EXISTS);
+												String jsonResposta19 = gson.toJson(mensagemUpdateEnviada);
+												System.out.println(jsonResposta19);
+												out.println(jsonResposta19);
+												
+											} else {
+												
+												Connection conn191919 = BancoDados.conectar();
+												new JobsetDAO(conn191919).atualizar(Integer.parseInt(idSkill19), experience19, id19, skillNome19.getIdSkill());
+												
+												UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.SUCCESS);
+												String jsonResposta19 = gson.toJson(mensagemUpdateEnviada);
+												System.out.println(jsonResposta19);
+												out.println(jsonResposta19);
+											}
+
+										}
+										
+									} else {
+										
+										UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.JOB_NOT_FOUND);
+										String jsonResposta19 = gson.toJson(mensagemUpdateEnviada);
+										System.out.println(jsonResposta19);
+										out.println(jsonResposta19);
+									}
+										
+								} else {
+									
+									UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.SKILL_NOT_FOUND);
+									String jsonResposta19 = gson.toJson(mensagemUpdateEnviada);
+									System.out.println(jsonResposta19);
+									out.println(jsonResposta19);
+								}
+								
+							}
+							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(updateVaga.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta19 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta19);
+							out.println(jsonResposta19);
+						}
+						
+					break;	
+					
+					case DELETE_JOB:
+						
+						DeleteJobRequisicao deleteVaga = gson.fromJson(json, DeleteJobRequisicao.class);
+						
+						System.out.println(deleteVaga.getToken());
+						
+						try {
+							
+							verifica.verify(deleteVaga.getToken());
+							Map<String, Claim> decoded = JWT.decode(deleteVaga.getToken()).getClaims();
+		                    int id20 = decoded.get("id").asInt();
+		                    
+		                    TreeMap<String, String> data20 = (TreeMap<String,String>) deleteVaga.getData();
+							
+							String idSkill20 = data20.get("id");
+							
+							System.out.println(idSkill20);
+							
+							Connection conn20 = BancoDados.conectar();
+							Skill idSkillBusca20 = new SkillDAO(conn20).buscarPorCodigo(Integer.parseInt(idSkill20));
+							
+							if(idSkill20.trim().equals("")) {
+								
+								RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(deleteVaga.getOperation(), Status.INVALID_FIELD);
+								String jsonResposta20 = gson.toJson(mensagemNulaEnviada);
+								System.out.println(jsonResposta20);
+								out.println(jsonResposta20);
+								
+							} else {
+								
+								if (idSkillBusca20 != null) {
+									
+									Connection conn2020 = BancoDados.conectar();
+									int jobset20 = new JobsetDAO(conn2020).excluir(id20, Integer.parseInt(idSkill20));
+									
+									if(jobset20 > 0)
+									{
+										
+										DeleteJobResposta mensagemDeleteEnviada = new DeleteJobResposta(deleteVaga.getOperation(), Status.SUCCESS);
+										String jsonResposta20 = gson.toJson(mensagemDeleteEnviada);
+										System.out.println(jsonResposta20);
+										out.println(jsonResposta20);
+										
+									} else {
+										
+										DeleteJobResposta mensagemDeleteEnviada = new DeleteJobResposta(deleteVaga.getOperation(), Status.JOB_NOT_FOUND);
+										String jsonResposta20 = gson.toJson(mensagemDeleteEnviada);
+										System.out.println(jsonResposta20);
+										out.println(jsonResposta20);
+										
+									}
+				        				
+								} else {
+									DeleteJobResposta mensagemDeleteEnviada = new DeleteJobResposta(deleteVaga.getOperation(), Status.SKILL_NOT_EXISTS);
+									String jsonResposta20 = gson.toJson(mensagemDeleteEnviada);
+									System.out.println(jsonResposta20);
+									out.println(jsonResposta20);
+								}
+								
+							}
+							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(deleteVaga.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta20 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta20);
+							out.println(jsonResposta20);
+						}
+						
+					break;	
+					
+					case LOOKUP_JOBSET:
+						
+						LookUpJobsetRequisicao lookUpJobset = gson.fromJson(json, LookUpJobsetRequisicao.class);
+						
+						System.out.println(lookUpJobset.getToken());
+						
+						try {
+							verifica.verify(lookUpJobset.getToken());
+							Map<String, Claim> decoded = JWT.decode(lookUpJobset.getToken()).getClaims();
+		                    int id22 = decoded.get("id").asInt();
+
+							Connection conn22 = BancoDados.conectar();
+							JobsetDAO jobset22 = new JobsetDAO(conn22);
+							List<Map<String, String>> jobs22 = jobset22.buscarHabilidadesPorRecruiter(id22);
+							
+							LookUpJobsetResposta mensagemLookUpEnviada = new LookUpJobsetResposta(lookUpJobset.getOperation(), Status.SUCCESS, jobs22);
+							String jsonResposta22 = gson.toJson(mensagemLookUpEnviada);
+							System.out.println(jsonResposta22);
+							out.println(jsonResposta22);
+							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(lookUpJobset.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta22 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta22);
+							out.println(jsonResposta22);
+						}
+						
+					break;
+					
+					case SEARCH_JOB:
+						
+						SearchJobRequisicao searchJobRequisicao = gson.fromJson(json, SearchJobRequisicao.class);
+
+				        System.out.println(searchJobRequisicao.getToken());
+
+				        try {
+
+				            verifica.verify(searchJobRequisicao.getToken());
+				            //Map<String, Claim> decoded = JWT.decode(searchJobRequisicao.getToken()).getClaims();
+				            //int recruiterId = decoded.get("id").asInt();
+
+				            Connection conn23 = BancoDados.conectar();
+				            JobsetDAO jobset23 = new JobsetDAO(conn23);
+				            List<Map<String, String>> jobs = jobset23.buscarEmpregosPorCriterios(searchJobRequisicao.getData().getSkill(), searchJobRequisicao.getData().getFilter());
+
+				            SearchJobResposta mensagemSearchJobEnviada = new SearchJobResposta(searchJobRequisicao.getOperation(), Status.SUCCESS, jobs);
+				            String jsonResposta23 = gson.toJson(mensagemSearchJobEnviada);
+				            System.out.println(jsonResposta23);
+				            out.println(jsonResposta23);
+
+				        } catch(Exception e) {
+				            RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(searchJobRequisicao.getOperation(), Status.INVALID_TOKEN);
+				            String jsonResposta23 = gson.toJson(mensagemTokenEnviada);
+				            System.out.println(jsonResposta23);
+							out.println(jsonResposta23);
+				        }
+				    
+				    break;    
+												
 					case NAO_EXISTE:
 						
 						RequisicaoInvalida invalida1 = gson.fromJson(json,  RequisicaoInvalida.class);

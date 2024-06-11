@@ -3,6 +3,8 @@ package cliente;
 import java.io.*;
 import java.net.*;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,10 +19,14 @@ import gui.SignUpCandidateWindow;
 import gui.UpdateCandidateWindow;
 import operacoes.DeleteCandidateRequisicao;
 import operacoes.DeleteCandidateResposta;
+import operacoes.DeleteJobRequisicao;
+import operacoes.DeleteJobResposta;
 import operacoes.DeleteRecruiterRequisicao;
 import operacoes.DeleteRecruiterResposta;
 import operacoes.DeleteSkillRequisicao;
 import operacoes.DeleteSkillResposta;
+import operacoes.IncludeJobRequisicao;
+import operacoes.IncludeJobResposta;
 import operacoes.IncludeSkillRequisicao;
 import operacoes.IncludeSkillResposta;
 import operacoes.LoginCandidateRequisicao;
@@ -33,17 +39,27 @@ import operacoes.LogoutRecruiterRequisicao;
 import operacoes.LogoutRecruiterResposta;
 import operacoes.LookUpCandidateRequisicao;
 import operacoes.LookUpCandidateResposta;
+import operacoes.LookUpJobRequisicao;
+import operacoes.LookUpJobResposta;
+import operacoes.LookUpJobsetRequisicao;
+import operacoes.LookUpJobsetResposta;
 import operacoes.LookUpRecruiterRequisicao;
 import operacoes.LookUpSkillRequisicao;
 import operacoes.LookUpSkillResposta;
+import operacoes.LookUpSkillsetRequisicao;
+import operacoes.LookUpSkillsetResposta;
 import operacoes.RequisicaoInvalida;
 import operacoes.RespostaInvalida;
+import operacoes.SearchJobRequisicao;
+import operacoes.SearchJobResposta;
 import operacoes.SignUpCandidateRequisicao;
 import operacoes.SignUpCandidateResposta;
 import operacoes.SignUpRecruiterRequisicao;
 import operacoes.SignUpRecruiterResposta;
 import operacoes.UpdateCandidateRequisicao;
 import operacoes.UpdateCandidateResposta;
+import operacoes.UpdateJobRequisicao;
+import operacoes.UpdateJobResposta;
 import operacoes.UpdateRecruiterRequisicao;
 import operacoes.UpdateRecruiterResposta;
 import operacoes.UpdateSkillRequisicao;
@@ -112,7 +128,9 @@ public class Cliente {
         
         System.out.println("1- Login candidato\n2- Logout candidato\n3- SignUp candidato\n4- LookUp candidato\n5- Update candidato\n6- Delete candidato");
         System.out.println("7- Login empresa\n8- Logout empresa\n9- SignUp empresa\n10- LookUp empresa\n11- Update empresa\n12- Delete empresa");
-        System.out.println("13- Include competência\n14- LookUp competência\n15- Update competência\n16- Delete competência\n20- Finalizar\n");
+        System.out.println("13- Include competência\n14- LookUp competência\n15- Update competência\n16- Delete competência");
+        System.out.println("17- Include vaga\n18- LookUp vaga\n19- Update vaga\n20- Delete vaga");
+        System.out.println("21- LookUp skillset\n22- LookUp jobset\n23- Search job\n24- Finalizar\n");
         System.out.print("Digite a opcao: ");
         
         String token = null;
@@ -853,10 +871,144 @@ public class Cliente {
         				
         				System.out.print("Nova opção: ");
         				
-        				break;
+        			break;
         				
+        			case "17":
         				
+        				System.out.print("Digite a competência: ");
+        				String skill17 = stdIn.readLine();
+                	
+        				System.out.print("Digite a experiência: ");
+        				String experience17 = stdIn.readLine();
+        				
+        				IncludeJobRequisicao includeVagaRequisicao = new IncludeJobRequisicao(Operacoes.INCLUDE_JOB, token1, skill17, experience17);
+            			
+        				String jsonRequisicaoVagaInclude = gson.toJson(includeVagaRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoVagaInclude);
+        				out.println(jsonRequisicaoVagaInclude);
+                    
+        				IncludeJobResposta includeVagaResposta = gson.fromJson(in.readLine(), IncludeJobResposta.class);
+        				String jsonRespostaVagaInclude = gson.toJson(includeVagaResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaVagaInclude);
+        				
+        				System.out.print("Nova opção: ");
+        				
+        			break;
+        			
+        			case "18":
+        				
+        				System.out.print("Digite o id: ");
+        				String id18 = stdIn.readLine();
+        				
+        				LookUpJobRequisicao lookUpVagaRequisicao = new LookUpJobRequisicao(Operacoes.LOOKUP_JOB, token1, id18);
+            			
+        				String jsonRequisicaoVagaLookUp = gson.toJson(lookUpVagaRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoVagaLookUp);
+        				out.println(jsonRequisicaoVagaLookUp);
+                    
+        				LookUpJobResposta lookUpVagaResposta = gson.fromJson(in.readLine(), LookUpJobResposta.class);
+        				String jsonRespostaVagaLookUp = gson.toJson(lookUpVagaResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaVagaLookUp);
+        				
+        				System.out.print("Nova opção: ");
+        				
+        			break;
+        			
+        			case "19":
+        				
+        				System.out.print("Digite o id: ");
+        				String id19 = stdIn.readLine();
+        				
+        				System.out.print("Digite a competência para atualizar: ");
+        				String skill19 = stdIn.readLine();
+                	
+        				System.out.print("Digite a experiência: ");
+        				String experience19 = stdIn.readLine();
+        				
+        				UpdateJobRequisicao updateVagaRequisicao = new UpdateJobRequisicao(Operacoes.UPDATE_JOB, token1, id19, skill19, experience19);
+            			
+        				String jsonRequisicaoVagaUpdate = gson.toJson(updateVagaRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoVagaUpdate);
+        				out.println(jsonRequisicaoVagaUpdate);
+                    
+        				UpdateJobResposta updateVagaResposta = gson.fromJson(in.readLine(), UpdateJobResposta.class);
+        				String jsonRespostaVagaUpdate = gson.toJson(updateVagaResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaVagaUpdate);
+        				
+        				System.out.print("Nova opção: ");
+        				
+        			break;
+        			
         			case "20":
+        				
+        				System.out.print("Digite o id: ");
+        				String id20 = stdIn.readLine();
+        				
+        				DeleteJobRequisicao deleteVagaRequisicao = new DeleteJobRequisicao(Operacoes.DELETE_JOB, token1, id20);
+            			
+        				String jsonRequisicaoVagaDelete = gson.toJson(deleteVagaRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoVagaDelete);
+        				out.println(jsonRequisicaoVagaDelete);
+                    
+        				DeleteJobResposta deleteVagaResposta = gson.fromJson(in.readLine(), DeleteJobResposta.class);
+        				String jsonRespostaVagaDelete = gson.toJson(deleteVagaResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaVagaDelete);
+        				
+        				System.out.print("Nova opção: ");
+        				
+        			break;	
+        			
+        			case "21":
+        				
+        				LookUpSkillsetRequisicao lookUpSkillsetRequisicao = new LookUpSkillsetRequisicao(Operacoes.LOOKUP_SKILLSET, token);
+        				
+        				String jsonRequisicaoSkillsetLookUp = gson.toJson(lookUpSkillsetRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoSkillsetLookUp);
+        				out.println(jsonRequisicaoSkillsetLookUp);
+                    
+        				LookUpSkillsetResposta lookUpSkillsetResposta = gson.fromJson(in.readLine(), LookUpSkillsetResposta.class);
+        				String jsonRespostaSkillsetLookUp = gson.toJson(lookUpSkillsetResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaSkillsetLookUp);
+        				
+        				System.out.print("Nova opção: ");
+        			
+        			break;
+        			
+        			case "22":
+        				
+        				LookUpJobsetRequisicao lookUpJobsetRequisicao = new LookUpJobsetRequisicao(Operacoes.LOOKUP_JOBSET, token1);
+        				
+        				String jsonRequisicaoJobsetLookUp = gson.toJson(lookUpJobsetRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoJobsetLookUp);
+        				out.println(jsonRequisicaoJobsetLookUp);
+                    
+        				LookUpJobsetResposta lookUpJobsetResposta = gson.fromJson(in.readLine(), LookUpJobsetResposta.class);
+        				String jsonRespostaJobsetLookUp = gson.toJson(lookUpJobsetResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaJobsetLookUp);
+        				
+        				System.out.print("Nova opção: ");
+        			
+        			break;
+        			
+        			case "23":
+        				
+        				List<String> skills = Arrays.asList("HTML", "Ruby");
+        				String filter = "OU"; // Ou "OU" conforme necessário
+
+        				SearchJobRequisicao.Data requestData = new SearchJobRequisicao.Data(skills, filter);
+        				SearchJobRequisicao searchJobRequisicao = new SearchJobRequisicao(Operacoes.SEARCH_JOB, token, requestData);
+
+        				String jsonRequisicaoSearchJob = gson.toJson(searchJobRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoSearchJob);
+        				out.println(jsonRequisicaoSearchJob);
+        				
+        				SearchJobResposta searchJobResposta = gson.fromJson(in.readLine(), SearchJobResposta.class);
+        				String jsonRespostaSearchJob = gson.toJson(searchJobResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaSearchJob);
+        			
+        			break;	
+        				
+        			case "24":
         				return;
         			
         			default:

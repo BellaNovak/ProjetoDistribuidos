@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import entities.Jobset;
 import entities.Recruiter;
@@ -125,6 +127,45 @@ public class JobsetDAO {
 		}
 	}
 	
+	public List<Map<String, String>> buscarHabilidadesPorRecruiter(int idRecruiter) {
+
+		//PreparedStatement st = null;
+
+		List<Map<String, String>> jobs = new ArrayList<>();
+
+		try {
+
+			//st = conn.prepareStatement("select skill_id, experience from skillset where candidate_id = ?");
+			String sql = "SELECT skill.skill, jobset.experience, jobset.skill_id " +
+                     "FROM jobset " +
+                     "JOIN skill ON jobset.skill_id = skill.id_skill " +
+                     "WHERE jobset.recruiter_id = ?";
+
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, idRecruiter);
+
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+
+				Map<String, String> job = new TreeMap<>();
+				job.put("skill", rs.getString("skill"));
+				job.put("experience", rs.getString("experience"));
+				job.put("id", String.valueOf(rs.getInt("skill_id")));
+				jobs.add(job);
+			}
+
+			BancoDados.finalizarStatement(st);
+			BancoDados.finalizarResultSet(rs);
+			BancoDados.desconectar();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return jobs;
+	}
+	
 	public Jobset buscarEspecifica(int idRecruiter, int idSkill) throws SQLException {
 
 		PreparedStatement st = null;
@@ -166,18 +207,61 @@ public class JobsetDAO {
 		}
 	}
 	
+	public List<Map<String, String>> buscarEmpregosPorCriterios(List<String> skills, String filter) {
+        List<Map<String, String>> jobs = new ArrayList<>();
+        try {
+            StringBuilder sql = new StringBuilder("SELECT skill.skill, jobset.experience, jobset.skill_id FROM jobset JOIN skill ON jobset.skill_id = skill.id_skill");
+
+            if (skills != null && !skills.isEmpty()) {
+                sql.append(" WHERE ");
+                for (int i = 0; i < skills.size(); i++) {
+                    if (i > 0) {
+                        sql.append(filter.equalsIgnoreCase("E") ? " AND " : " OR ");
+                    }
+                    sql.append("skill.skill = ?");
+                }
+            }
+
+            PreparedStatement stmt = conn.prepareStatement(sql.toString());
+
+            if (skills != null && !skills.isEmpty()) {
+                for (int i = 0; i < skills.size(); i++) {
+                    stmt.setString(i + 1, skills.get(i));
+                }
+            }
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Map<String, String> job = new TreeMap<>();
+                job.put("skill", rs.getString("skill"));
+                job.put("experience", rs.getString("experience"));
+                job.put("id", String.valueOf(rs.getInt("skill_id")));
+                jobs.add(job);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return jobs;
+    }
 	
-	public void atualizar(String experience, int idRecruiter, int idSkill) throws SQLException {
+	
+	public void atualizar(int idNew, String experience, int idRecruiter, int idSkill) throws SQLException {
 
 		PreparedStatement st = null;
 
 		try {
 
-			st = conn.prepareStatement("update jobset set experience = ? where recruiter_id = ? and skill_id = ?");
+			st = conn.prepareStatement("update jobset set skill_id = ?, experience = ? where recruiter_id = ? and skill_id = ?");
 		
-			st.setString(1, experience);
-			st.setInt(2, idRecruiter);
-			st.setInt(3, idSkill);
+			st.setInt(1, idNew);
+			st.setString(2, experience);
+			st.setInt(3, idRecruiter);
+			st.setInt(4, idSkill);
 
 			st.executeUpdate();
 

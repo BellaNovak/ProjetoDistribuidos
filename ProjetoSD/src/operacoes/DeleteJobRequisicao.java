@@ -10,9 +10,9 @@ public class DeleteJobRequisicao extends Requisicao{
 	@Getter
 	private TreeMap<String, String> data = new TreeMap<String, String>();
 	
-	public DeleteJobRequisicao(Operacoes operation, String token, String skill) {
+	public DeleteJobRequisicao(Operacoes operation, String token, String id) {
 		super(operation, token);
-		data.put("skill", skill);
+		data.put("id", id);
 	}
 
 }

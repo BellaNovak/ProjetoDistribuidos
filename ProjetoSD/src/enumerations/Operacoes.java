@@ -24,6 +24,7 @@ public enum Operacoes {
     LOOKUP_JOBSET,
     UPDATE_JOB,
     DELETE_JOB,
+    SEARCH_JOB,
     NAO_EXISTE,
     
 }

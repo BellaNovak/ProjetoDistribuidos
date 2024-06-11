@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import entities.Candidate;
 import entities.Skill;
@@ -123,6 +125,44 @@ public class SkillsetDAO {
 			BancoDados.finalizarResultSet(rs);
 			BancoDados.desconectar();
 		}
+	}
+	
+	public List<Map<String, String>> buscarHabilidadesPorCandidate(int idCandidate) {
+
+		//PreparedStatement st = null;
+
+		List<Map<String, String>> skills = new ArrayList<>();
+
+		try {
+
+			//st = conn.prepareStatement("select skill_id, experience from skillset where candidate_id = ?");
+			String sql = "SELECT skill.skill, skillset.experience " +
+                     "FROM skillset " +
+                     "JOIN skill ON skillset.skill_id = skill.id_skill " +
+                     "WHERE skillset.candidate_id = ?";
+
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, idCandidate);
+
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+
+				Map<String, String> skill = new TreeMap<>();
+				skill.put("skill", rs.getString("skill"));
+				skill.put("experience", rs.getString("experience"));
+				skills.add(skill);
+			}
+
+			BancoDados.finalizarStatement(st);
+			BancoDados.finalizarResultSet(rs);
+			BancoDados.desconectar();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return skills;
 	}
 	
 	public Skillset buscarEspecifica(int idCandidate, int idSkill) throws SQLException {
