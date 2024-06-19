@@ -23,7 +23,7 @@ public class SearchJobResposta extends Resposta{
 	public SearchJobResposta(Operacoes operation, Status status) {
 		super(operation, status);
 		data.put("jobset_size", "0");
-        data.put("jobset", new ArrayList<>());
+        data.put("jobset", new ArrayList<Map<String, String>>());
 	}
 
 }

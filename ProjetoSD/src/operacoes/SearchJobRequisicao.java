@@ -8,61 +8,34 @@ import lombok.Getter;
 
 public class SearchJobRequisicao extends Requisicao {
 
-	private String token;
-	private Operacoes operation;
-	private Data data;
+	@Getter
+	private TreeMap<String, Object> data = new TreeMap<>();
 
-	public SearchJobRequisicao(Operacoes operation, String token, Data data) {
+	/*public SearchJobRequisicao(Operacoes operation, String token, String[] skill) {
 		super(operation, token);
-		this.data = data;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public Operacoes getOperation() {
-		return operation;
-	}
-
-	public Data getData() {
-		return data;
-	}
-
-	public static class Data {
-		private List<String> skill;
-		private String filter;
-
-		public Data(List<String> skill, String filter) {
-			this.skill = skill;
-			this.filter = filter;
-		}
-
-		public List<String> getSkill() {
-			return skill;
-		}
-
-		public String getFilter() {
-			return filter;
-		}
-	}
-	/*@Getter
-	private TreeMap<String, String> data = new TreeMap<String, String>();
+		data.put("skill", Arrays.asList(skill));
+	}*/
 	
-	public SearchJobRequisicao(Operacoes operation, String token, String skill[], String filter) {
+	public SearchJobRequisicao(Operacoes operation, String token, List<String> skill) {
 		super(operation, token);
-		//data.put("skill", skill);
-		data.put("filter", filter);
+		data.put("skill", skill);
+	}
+
+	public SearchJobRequisicao(Operacoes operation, String token, String experience) {
+		super(operation, token);
+		data.put("experience", experience);
 	}
 	
-	public SearchJobRequisicao(Operacoes operation, String token, String experience, String filter) {
+	public SearchJobRequisicao(Operacoes operation, String token, List<String> skill, String experience, String filter) {
 		super(operation, token);
+		data.put("skill", skill);
 		data.put("experience", experience);
 		data.put("filter", filter);
 	}
-	
-	public SearchJobRequisicao(Operacoes operation, String token, String skill[], String experience, String filter) {
+
+	/*public SearchJobRequisicao(Operacoes operation, String token, String[] skill, String experience, String filter) {
 		super(operation, token);
+		data.put("skill", Arrays.asList(skill));
 		data.put("experience", experience);
 		data.put("filter", filter);
 	}*/

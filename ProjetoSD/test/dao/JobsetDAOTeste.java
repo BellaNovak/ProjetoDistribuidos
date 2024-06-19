@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 import entities.Jobset;
 import entities.Recruiter;
@@ -73,16 +74,14 @@ public static void cadastrarJobsetTeste() throws SQLException, IOException {
 		}
 	}
 	
-
 	public static void atualizarJobsetTeste() throws SQLException, IOException, ParseException {
 
-		int idNew = 8;
-		String experience = "Básico";
-		int idRecruiter = 1;
+		String experience = "2";
+		int idRecruiter = 2;
 		int idSkill = 5;
 
 		Connection conn = BancoDados.conectar();
-		new JobsetDAO(conn).atualizar(idNew, experience, idRecruiter, idSkill);
+		new JobsetDAO(conn).atualizar(experience, idRecruiter, idSkill);
 
 		System.out.println("Dados atualizados com sucesso.");
 	}
@@ -111,10 +110,10 @@ public static void cadastrarJobsetTeste() throws SQLException, IOException {
 		try {
 			
 			//JobsetDAOTeste.cadastrarJobsetTeste();
-			//JobsetDAOTeste.buscarTodosJobsetTeste();
+			JobsetDAOTeste.buscarTodosJobsetTeste();
 			//JobsetDAOTeste.buscarPorRecruiterTeste();
 			//JobsetDAOTeste.buscarEspecificaTeste();
-			JobsetDAOTeste.atualizarJobsetTeste();
+			//JobsetDAOTeste.atualizarJobsetTeste();
 			//JobsetDAOTeste.excluirJobsetTeste();
 
 		} catch (SQLException | IOException e) {

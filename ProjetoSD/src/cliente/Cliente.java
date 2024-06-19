@@ -3,6 +3,7 @@ package cliente;
 import java.io.*;
 import java.net.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -130,7 +131,7 @@ public class Cliente {
         System.out.println("7- Login empresa\n8- Logout empresa\n9- SignUp empresa\n10- LookUp empresa\n11- Update empresa\n12- Delete empresa");
         System.out.println("13- Include competência\n14- LookUp competência\n15- Update competência\n16- Delete competência");
         System.out.println("17- Include vaga\n18- LookUp vaga\n19- Update vaga\n20- Delete vaga");
-        System.out.println("21- LookUp skillset\n22- LookUp jobset\n23- Search job\n24- Finalizar\n");
+        System.out.println("21- LookUp skillset\n22- LookUp jobset\n23- Search job competência\n24- Search job experiência\n25- Search job filtro\n26- Finalizar\n");
         System.out.print("Digite a opcao: ");
         
         String token = null;
@@ -992,23 +993,89 @@ public class Cliente {
         			
         			case "23":
         				
-        				List<String> skills = Arrays.asList("HTML", "Ruby");
-        				String filter = "OU"; // Ou "OU" conforme necessário
+						List<String> habilidades23 = new ArrayList<>();
+						System.out.println("Digite as habilidades (digite 'sair' para terminar):");
+						while (true) {
+							String habilidade = stdIn.readLine();
+							if (habilidade.equalsIgnoreCase("sair")) {
+								break;
+							}
+							habilidades23.add(habilidade);
+						}
 
-        				SearchJobRequisicao.Data requestData = new SearchJobRequisicao.Data(skills, filter);
-        				SearchJobRequisicao searchJobRequisicao = new SearchJobRequisicao(Operacoes.SEARCH_JOB, token, requestData);
+						//String[] habilidadesArray23 = habilidades23.toArray(new String[0]);
+						//SearchJobRequisicao searchJobRequisicaoSkill = new SearchJobRequisicao(Operacoes.SEARCH_JOB, token, habilidadesArray23);
 
-        				String jsonRequisicaoSearchJob = gson.toJson(searchJobRequisicao);
-        				System.out.println("Requisição enviada: " + jsonRequisicaoSearchJob);
-        				out.println(jsonRequisicaoSearchJob);
-        				
-        				SearchJobResposta searchJobResposta = gson.fromJson(in.readLine(), SearchJobResposta.class);
-        				String jsonRespostaSearchJob = gson.toJson(searchJobResposta);
-        				System.out.println("Resposta recebida: " + jsonRespostaSearchJob);
-        			
+						SearchJobRequisicao searchJobRequisicaoSkill = new SearchJobRequisicao(Operacoes.SEARCH_JOB, token, habilidades23);
+						
+						String jsonRequisicaoSearchJobSkill = gson.toJson(searchJobRequisicaoSkill);
+						System.out.println("Requisição enviada: " + jsonRequisicaoSearchJobSkill);
+						out.println(jsonRequisicaoSearchJobSkill);
+
+						SearchJobResposta searchJobRespostaSkill = gson.fromJson(in.readLine(), SearchJobResposta.class);
+						String jsonRespostaSearchJobSkill = gson.toJson(searchJobRespostaSkill);
+						System.out.println("Resposta recebida: " + jsonRespostaSearchJobSkill);
+
+						System.out.print("Nova opção: ");
+
         			break;	
         				
         			case "24":
+        				
+        				System.out.print("Digite a experiência: ");
+        				String experience24 = stdIn.readLine();
+        				
+        				SearchJobRequisicao searchJobRequisicaoExperience = new SearchJobRequisicao(Operacoes.SEARCH_JOB, token, experience24);
+
+						String jsonRequisicaoSearchJobExperience = gson.toJson(searchJobRequisicaoExperience);
+						System.out.println("Requisição enviada: " + jsonRequisicaoSearchJobExperience);
+						out.println(jsonRequisicaoSearchJobExperience);
+
+						SearchJobResposta searchJobRespostaExperience = gson.fromJson(in.readLine(), SearchJobResposta.class);
+						String jsonRespostaSearchJobExperience = gson.toJson(searchJobRespostaExperience);
+						System.out.println("Resposta recebida: " + jsonRespostaSearchJobExperience);
+						
+						System.out.print("Nova opção: ");
+        				
+        			break;
+        				
+        			case "25":
+        				
+        				List<String> habilidades25 = new ArrayList<>();
+						System.out.println("Digite as habilidades (digite 'sair' para terminar):");
+						while (true) {
+							String habilidade = stdIn.readLine();
+							if (habilidade.equalsIgnoreCase("sair")) {
+								break;
+							}
+							habilidades25.add(habilidade);
+						}
+
+						//String[] habilidadesArray25 = habilidades25.toArray(new String[0]);
+						//SearchJobRequisicao searchJobRequisicaoFilter = new SearchJobRequisicao(Operacoes.SEARCH_JOB, token, habilidadesArray25, experience25, filter25);
+
+						
+						System.out.print("Digite a experiência: ");
+        				String experience25 = stdIn.readLine();
+        				
+        				System.out.print("Digite o filtro (E/OU): ");
+        				String filter25 = stdIn.readLine();
+
+						SearchJobRequisicao searchJobRequisicaoFilter = new SearchJobRequisicao(Operacoes.SEARCH_JOB, token, habilidades25, experience25, filter25);
+
+						String jsonRequisicaoSearchJobFilter = gson.toJson(searchJobRequisicaoFilter);
+						System.out.println("Requisição enviada: " + jsonRequisicaoSearchJobFilter);
+						out.println(jsonRequisicaoSearchJobFilter);
+
+						SearchJobResposta searchJobRespostaFilter = gson.fromJson(in.readLine(), SearchJobResposta.class);
+						String jsonRespostaSearchJobFilter = gson.toJson(searchJobRespostaFilter);
+						System.out.println("Resposta recebida: " + jsonRespostaSearchJobFilter);
+
+						System.out.print("Nova opção: ");
+        				
+        			break;
+        			
+        			case "26":
         				return;
         			
         			default:

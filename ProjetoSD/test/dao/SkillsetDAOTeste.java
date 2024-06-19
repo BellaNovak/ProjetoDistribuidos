@@ -78,9 +78,9 @@ public class SkillsetDAOTeste {
 
 		
 		int newSkill = 10;
-		String experience = "Avançado";
+		String experience = "12";
 		int idCandidate = 1;
-		int idSkill = 1;
+		int idSkill = 10;
 
 		Connection conn = BancoDados.conectar();
 		new SkillsetDAO(conn).atualizar(newSkill, experience, idCandidate, idSkill);

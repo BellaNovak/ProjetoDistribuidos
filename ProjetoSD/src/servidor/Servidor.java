@@ -866,7 +866,7 @@ public class Servidor extends Thread {
 									
 									if(skillset14 != null)
 									{
-										LookUpSkillResposta mensagemLookUpEnviada = new LookUpSkillResposta(lookUpCompetencia.getOperation(), Status.SUCCESS, skill14, skillset14.getExperience(),Integer.toString(skillset14.getSkill().getIdSkill()));
+										LookUpSkillResposta mensagemLookUpEnviada = new LookUpSkillResposta(lookUpCompetencia.getOperation(), Status.SUCCESS, skill14, skillset14.getExperience());
 										String jsonResposta14 = gson.toJson(mensagemLookUpEnviada);
 										System.out.println(jsonResposta14);
 										out.println(jsonResposta14);
@@ -881,7 +881,7 @@ public class Servidor extends Thread {
 									}
 				        				
 								} else {
-									LookUpSkillResposta mensagemLookUpEnviada = new LookUpSkillResposta(lookUpCompetencia.getOperation(), Status.SKILL_NOT_FOUND);
+									LookUpSkillResposta mensagemLookUpEnviada = new LookUpSkillResposta(lookUpCompetencia.getOperation(), Status.SKILL_NOT_EXISTS);
 									String jsonResposta14 = gson.toJson(mensagemLookUpEnviada);
 									System.out.println(jsonResposta14);
 									out.println(jsonResposta14);
@@ -991,7 +991,7 @@ public class Servidor extends Thread {
 										
 								} else {
 									
-									UpdateSkillResposta mensagemUpdateEnviada = new UpdateSkillResposta(updateCompetencia.getOperation(), Status.SKILL_NOT_FOUND);
+									UpdateSkillResposta mensagemUpdateEnviada = new UpdateSkillResposta(updateCompetencia.getOperation(), Status.SKILL_NOT_EXISTS);
 									String jsonResposta15 = gson.toJson(mensagemUpdateEnviada);
 									System.out.println(jsonResposta15);
 									out.println(jsonResposta15);
@@ -1062,7 +1062,7 @@ public class Servidor extends Thread {
 									}
 				        				
 								} else {
-									DeleteSkillResposta mensagemDeleteEnviada = new DeleteSkillResposta(deleteCompetencia.getOperation(), Status.SKILL_NOT_FOUND);
+									DeleteSkillResposta mensagemDeleteEnviada = new DeleteSkillResposta(deleteCompetencia.getOperation(), Status.SKILL_NOT_EXISTS);
 									String jsonResposta16 = gson.toJson(mensagemDeleteEnviada);
 									System.out.println(jsonResposta16);
 									out.println(jsonResposta16);
@@ -1313,12 +1313,12 @@ public class Servidor extends Thread {
 									Jobset newJobset19 = new JobsetDAO(conn19199).buscarEspecifica(id19, Integer.parseInt(idSkill19));
 									
 									
-									if(jobset19 != null) {
+									if(jobset19 != null && newJobset19 != null) {
 										
 										if(Integer.parseInt(idSkill19) == skillNome19.getIdSkill()) {
 
 											Connection conn191919 = BancoDados.conectar();
-											new JobsetDAO(conn191919).atualizar(Integer.parseInt(idSkill19), experience19, id19, skillNome19.getIdSkill());
+											new JobsetDAO(conn191919).atualizar(experience19, id19, skillNome19.getIdSkill());
 											
 											UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.SUCCESS);
 											String jsonResposta19 = gson.toJson(mensagemUpdateEnviada);
@@ -1327,23 +1327,28 @@ public class Servidor extends Thread {
 											
 										} else {
 											
-											if(newJobset19 != null) {
+											UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.JOB_NOT_FOUND);
+											String jsonResposta19 = gson.toJson(mensagemUpdateEnviada);
+											System.out.println(jsonResposta19);
+											out.println(jsonResposta19);
+											
+											//if(newJobset19 != null) {
 												
-												UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.JOB_EXISTS);
+												/*UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.JOB_EXISTS);
 												String jsonResposta19 = gson.toJson(mensagemUpdateEnviada);
 												System.out.println(jsonResposta19);
-												out.println(jsonResposta19);
+												out.println(jsonResposta19);*/
 												
-											} else {
+											/*} else {
 												
 												Connection conn191919 = BancoDados.conectar();
-												new JobsetDAO(conn191919).atualizar(Integer.parseInt(idSkill19), experience19, id19, skillNome19.getIdSkill());
+												new JobsetDAO(conn191919).atualizar(experience19, id19, skillNome19.getIdSkill());
 												
 												UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.SUCCESS);
 												String jsonResposta19 = gson.toJson(mensagemUpdateEnviada);
 												System.out.println(jsonResposta19);
 												out.println(jsonResposta19);
-											}
+											}*/
 
 										}
 										
@@ -1459,7 +1464,7 @@ public class Servidor extends Thread {
 
 							Connection conn22 = BancoDados.conectar();
 							JobsetDAO jobset22 = new JobsetDAO(conn22);
-							List<Map<String, String>> jobs22 = jobset22.buscarHabilidadesPorRecruiter(id22);
+							List<Map<String, String>> jobs22 = jobset22.buscarVagasPorRecruiter(id22);
 							
 							LookUpJobsetResposta mensagemLookUpEnviada = new LookUpJobsetResposta(lookUpJobset.getOperation(), Status.SUCCESS, jobs22);
 							String jsonResposta22 = gson.toJson(mensagemLookUpEnviada);
@@ -1479,30 +1484,70 @@ public class Servidor extends Thread {
 					case SEARCH_JOB:
 						
 						SearchJobRequisicao searchJobRequisicao = gson.fromJson(json, SearchJobRequisicao.class);
+						
+						System.out.println(searchJobRequisicao.getToken());
 
-				        System.out.println(searchJobRequisicao.getToken());
+						try {
 
-				        try {
+						    verifica.verify(searchJobRequisicao.getToken());
 
-				            verifica.verify(searchJobRequisicao.getToken());
-				            //Map<String, Claim> decoded = JWT.decode(searchJobRequisicao.getToken()).getClaims();
-				            //int recruiterId = decoded.get("id").asInt();
-
-				            Connection conn23 = BancoDados.conectar();
-				            JobsetDAO jobset23 = new JobsetDAO(conn23);
-				            List<Map<String, String>> jobs = jobset23.buscarEmpregosPorCriterios(searchJobRequisicao.getData().getSkill(), searchJobRequisicao.getData().getFilter());
-
-				            SearchJobResposta mensagemSearchJobEnviada = new SearchJobResposta(searchJobRequisicao.getOperation(), Status.SUCCESS, jobs);
-				            String jsonResposta23 = gson.toJson(mensagemSearchJobEnviada);
-				            System.out.println(jsonResposta23);
-				            out.println(jsonResposta23);
-
-				        } catch(Exception e) {
-				            RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(searchJobRequisicao.getOperation(), Status.INVALID_TOKEN);
-				            String jsonResposta23 = gson.toJson(mensagemTokenEnviada);
-				            System.out.println(jsonResposta23);
-							out.println(jsonResposta23);
-				        }
+						    List<String> skills = (List<String>) searchJobRequisicao.getData().get("skill");
+						    TreeMap<String, Object> data23 = (TreeMap<String,Object>) searchJobRequisicao.getData();
+						    
+						    String experienceStr23 = (String) data23.get("experience");
+						    String filter23 = (String) data23.get("filter");
+						    
+					        if(experienceStr23 == null) {
+					        	
+					        	Connection conn23 = BancoDados.conectar();
+							    JobsetDAO jobset1DAO = new JobsetDAO(conn23);
+							    
+							    List<Map<String, String>> jobsSkill = jobset1DAO.buscarEmpregosPorSkill(skills);
+							    
+					        	SearchJobResposta mensagemSearchEnviada = new SearchJobResposta(searchJobRequisicao.getOperation(), Status.SUCCESS, jobsSkill);
+						        String jsonResposta23 = gson.toJson(mensagemSearchEnviada);
+						        System.out.println(jsonResposta23);
+						        out.println(jsonResposta23);
+						        
+					        } else {
+					        	
+					        	if(filter23 == null){
+					        		
+					        		int experience23 = Integer.parseInt(experienceStr23);
+					        	
+					        		Connection conn232 = BancoDados.conectar();
+						        	JobsetDAO jobset2DAO = new JobsetDAO(conn232);
+						        
+						        	List<Map<String, String>> jobsExperience = jobset2DAO.buscarEmpregosPorExperiencia(experience23);
+						        
+					        		SearchJobResposta mensagemSearchEnviada = new SearchJobResposta(searchJobRequisicao.getOperation(), Status.SUCCESS, jobsExperience);
+						        	String jsonResposta23 = gson.toJson(mensagemSearchEnviada);
+						        	System.out.println(jsonResposta23);
+						        	out.println(jsonResposta23);
+						        	
+					        	} else{
+					        		
+					        		int experience23 = Integer.parseInt(experienceStr23);
+					        		
+					        		Connection conn2323 = BancoDados.conectar();
+					        		JobsetDAO jobset3DAO = new JobsetDAO(conn2323);
+					        		
+					        		List<Map<String, String>> jobsFilter = jobset3DAO.buscarEmpregosPorSkillEExperiencia(skills, experience23, filter23);
+					        		
+					        		SearchJobResposta mensagemSearchEnviada = new SearchJobResposta(searchJobRequisicao.getOperation(), Status.SUCCESS, jobsFilter);
+					        		String jsonResposta23 = gson.toJson(mensagemSearchEnviada);
+					        		System.out.println(jsonResposta23);
+					        		out.println(jsonResposta23);
+					        	}	
+					        }
+						    
+						} catch (Exception e) {
+						    e.printStackTrace();
+						    RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(searchJobRequisicao.getOperation(), Status.INVALID_TOKEN);
+						    String jsonResposta23 = gson.toJson(mensagemTokenEnviada);
+						    System.out.println(jsonResposta23);
+						    out.println(jsonResposta23);
+						}
 				    
 				    break;    
 												
