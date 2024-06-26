@@ -25,6 +25,11 @@ public enum Operacoes {
     UPDATE_JOB,
     DELETE_JOB,
     SEARCH_JOB,
+    SET_JOB_AVAILABLE,
+    SET_JOB_SEARCHABLE,
+    SEARCH_CANDIDATE,
+    CHOOSE_CANDIDATE,
+    GET_COMPANY,
     NAO_EXISTE,
     
 }

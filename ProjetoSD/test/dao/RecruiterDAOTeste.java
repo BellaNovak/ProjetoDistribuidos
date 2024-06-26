@@ -88,7 +88,7 @@ public class RecruiterDAOTeste {
 	
 	public static void excluirRecruiterTeste() throws SQLException, IOException {
 
-		int codigoRecruiter = 1;
+		int codigoRecruiter = 5;
 
 		Connection conn = BancoDados.conectar();
 		int linhasManipuladas = new CandidateDAO(conn).excluir(codigoRecruiter);
@@ -109,11 +109,11 @@ public class RecruiterDAOTeste {
 		try {
 
 			//RecruiterDAOTeste.cadastrarRecruiterTeste();
-			RecruiterDAOTeste. buscarTodosRecruiterTeste();
+			//RecruiterDAOTeste. buscarTodosRecruiterTeste();
 			//RecruiterDAOTeste.buscarPorCodigoTeste();
 			//RecruiterDAOTeste.buscarPorEmailTeste();
 			//RecruiterDAOTeste.atualizarRecruiterTeste();
-			//RecruiterDAOTeste.excluirRecruiterTeste();
+			RecruiterDAOTeste.excluirRecruiterTeste();
 
 		} catch (SQLException | IOException e) {
 

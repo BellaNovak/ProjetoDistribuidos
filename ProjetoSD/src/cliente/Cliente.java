@@ -6,18 +6,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import enumerations.Operacoes;
+import gui.ChooseWindow;
 import gui.ConexaoWindow;
+import gui.JobWindow;
 import gui.LoginCandidateWindow;
 import gui.OpcaoAreaWindow;
 import gui.OpcoesCandidateWindow;
 import gui.OpcoesRecruiterWindow;
+import gui.ProfileWindow;
 import gui.SignUpCandidateWindow;
 import gui.UpdateCandidateWindow;
+import operacoes.ChooseCandidateRequisicao;
+import operacoes.ChooseCandidateResposta;
 import operacoes.DeleteCandidateRequisicao;
 import operacoes.DeleteCandidateResposta;
 import operacoes.DeleteJobRequisicao;
@@ -26,6 +32,8 @@ import operacoes.DeleteRecruiterRequisicao;
 import operacoes.DeleteRecruiterResposta;
 import operacoes.DeleteSkillRequisicao;
 import operacoes.DeleteSkillResposta;
+import operacoes.GetCompanyRequisicao;
+import operacoes.GetCompanyResposta;
 import operacoes.IncludeJobRequisicao;
 import operacoes.IncludeJobResposta;
 import operacoes.IncludeSkillRequisicao;
@@ -53,6 +61,12 @@ import operacoes.RequisicaoInvalida;
 import operacoes.RespostaInvalida;
 import operacoes.SearchJobRequisicao;
 import operacoes.SearchJobResposta;
+import operacoes.SearchProfileRequisicao;
+import operacoes.SearchProfileResposta;
+import operacoes.SetJobAvailableRequisicao;
+import operacoes.SetJobAvailableResposta;
+import operacoes.SetJobSearchableRequisicao;
+import operacoes.SetJobSearchableResposta;
 import operacoes.SignUpCandidateRequisicao;
 import operacoes.SignUpCandidateResposta;
 import operacoes.SignUpRecruiterRequisicao;
@@ -131,7 +145,10 @@ public class Cliente {
         System.out.println("7- Login empresa\n8- Logout empresa\n9- SignUp empresa\n10- LookUp empresa\n11- Update empresa\n12- Delete empresa");
         System.out.println("13- Include competência\n14- LookUp competência\n15- Update competência\n16- Delete competência");
         System.out.println("17- Include vaga\n18- LookUp vaga\n19- Update vaga\n20- Delete vaga");
-        System.out.println("21- LookUp skillset\n22- LookUp jobset\n23- Search job competência\n24- Search job experiência\n25- Search job filtro\n26- Finalizar\n");
+        System.out.println("21- LookUp skillset\n22- LookUp jobset\n23- Search job competência\n24- Search job experiência\n25- Search job filtro");
+        System.out.println("26- Set vaga disponível\n27- Set vaga divulgável");
+        System.out.println("28- Search candidato competência\n29- Search candidato experiência\n30- Search candidato filtro");
+        System.out.println("31- Choose candidato\n32- Finalizar\n");
         System.out.print("Digite a opcao: ");
         
         String token = null;
@@ -214,12 +231,31 @@ public class Cliente {
         				String jsonRequisicaoCandidatoLogin = gson.toJson(loginCandidatoRequisicao);
         				System.out.println("Requisição enviada" + jsonRequisicaoCandidatoLogin);
         				out.println(jsonRequisicaoCandidatoLogin);
-                    
+        				
         				LoginCandidateResposta loginCandidatoResposta = gson.fromJson(in.readLine(), LoginCandidateResposta.class);
         				String jsonRespostaCandidatoLogin = gson.toJson(loginCandidatoResposta);
         				System.out.println("Resposta recebida: " + jsonRespostaCandidatoLogin);
         				token = loginCandidatoResposta.getData().get("token"); 
         				
+        				GetCompanyRequisicao getCompaniaRequisicao = new GetCompanyRequisicao(Operacoes.GET_COMPANY, token);
+        				
+        				String jsonRequisicaoCompaniaGet = gson.toJson(getCompaniaRequisicao);
+        				System.out.println("Requisição enviada" + jsonRequisicaoCompaniaGet);
+        				out.println(jsonRequisicaoCompaniaGet);
+        				
+        				GetCompanyResposta getCompaniaResposta = gson.fromJson(in.readLine(), GetCompanyResposta.class);
+        				String jsonRespostaCompaniaGet = gson.toJson(getCompaniaResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaCompaniaGet);
+        				
+        				List<Map<String, String>> empresasNome = (List<Map<String, String>>) getCompaniaResposta.getData().get("company");
+						ChooseWindow chooseWindow1 = new ChooseWindow(empresasNome);
+						chooseWindow1.show();
+        				
+        				/*List<Map<String, String>> companies = (List<Map<String, String>>) getCompaniaResposta.getData().get("company");
+        				for (Map<String, String> company : companies) {
+        				    System.out.println("Empresa: " + company.get("name"));
+        				}*/
+
         				System.out.print("Nova opção: ");
         				
         				/*OpcoesCandidateWindow opcaoCandidatoWindow1 = new OpcoesCandidateWindow();
@@ -882,7 +918,13 @@ public class Cliente {
         				System.out.print("Digite a experiência: ");
         				String experience17 = stdIn.readLine();
         				
-        				IncludeJobRequisicao includeVagaRequisicao = new IncludeJobRequisicao(Operacoes.INCLUDE_JOB, token1, skill17, experience17);
+        				System.out.print("Digite se está disponível: ");
+        				String available17 = stdIn.readLine();
+        				
+        				System.out.print("Digite se é divulgável: ");
+        				String searchable17 = stdIn.readLine();
+        				
+        				IncludeJobRequisicao includeVagaRequisicao = new IncludeJobRequisicao(Operacoes.INCLUDE_JOB, token1, skill17, experience17, available17, searchable17);
             			
         				String jsonRequisicaoVagaInclude = gson.toJson(includeVagaRequisicao);
         				System.out.println("Requisição enviada: " + jsonRequisicaoVagaInclude);
@@ -926,7 +968,13 @@ public class Cliente {
         				System.out.print("Digite a experiência: ");
         				String experience19 = stdIn.readLine();
         				
-        				UpdateJobRequisicao updateVagaRequisicao = new UpdateJobRequisicao(Operacoes.UPDATE_JOB, token1, id19, skill19, experience19);
+        				System.out.print("Digite se está disponível: ");
+        				String available19 = stdIn.readLine();
+        				
+        				System.out.print("Digite se é divulgável: ");
+        				String searchable19 = stdIn.readLine();
+        				
+        				UpdateJobRequisicao updateVagaRequisicao = new UpdateJobRequisicao(Operacoes.UPDATE_JOB, token1, id19, skill19, experience19, available19, searchable19);
             			
         				String jsonRequisicaoVagaUpdate = gson.toJson(updateVagaRequisicao);
         				System.out.println("Requisição enviada: " + jsonRequisicaoVagaUpdate);
@@ -1015,13 +1063,17 @@ public class Cliente {
 						SearchJobResposta searchJobRespostaSkill = gson.fromJson(in.readLine(), SearchJobResposta.class);
 						String jsonRespostaSearchJobSkill = gson.toJson(searchJobRespostaSkill);
 						System.out.println("Resposta recebida: " + jsonRespostaSearchJobSkill);
+						
+						List<Map<String, String>> jobsSkill = (List<Map<String, String>>) searchJobRespostaSkill.getData().get("jobset");
+						JobWindow jobWindow23 = new JobWindow(jobsSkill);
+						jobWindow23.show();
 
 						System.out.print("Nova opção: ");
 
         			break;	
         				
         			case "24":
-        				
+        				        				
         				System.out.print("Digite a experiência: ");
         				String experience24 = stdIn.readLine();
         				
@@ -1034,6 +1086,10 @@ public class Cliente {
 						SearchJobResposta searchJobRespostaExperience = gson.fromJson(in.readLine(), SearchJobResposta.class);
 						String jsonRespostaSearchJobExperience = gson.toJson(searchJobRespostaExperience);
 						System.out.println("Resposta recebida: " + jsonRespostaSearchJobExperience);
+						
+						List<Map<String, String>> jobsExperience = (List<Map<String, String>>) searchJobRespostaExperience.getData().get("jobset");
+						JobWindow jobWindow24 = new JobWindow(jobsExperience);
+						jobWindow24.show();
 						
 						System.out.print("Nova opção: ");
         				
@@ -1070,12 +1126,170 @@ public class Cliente {
 						SearchJobResposta searchJobRespostaFilter = gson.fromJson(in.readLine(), SearchJobResposta.class);
 						String jsonRespostaSearchJobFilter = gson.toJson(searchJobRespostaFilter);
 						System.out.println("Resposta recebida: " + jsonRespostaSearchJobFilter);
+						
+						List<Map<String, String>> jobsFilter = (List<Map<String, String>>) searchJobRespostaFilter.getData().get("jobset");
+						JobWindow jobWindow25 = new JobWindow(jobsFilter);
+						jobWindow25.show();
 
 						System.out.print("Nova opção: ");
         				
         			break;
         			
         			case "26":
+        				
+        				System.out.print("Digite o id: ");
+        				String id26 = stdIn.readLine();
+        				
+        				System.out.print("Digite se está disponível(YES/NO): ");
+        				String available26 = stdIn.readLine();
+
+						SetJobAvailableRequisicao setVagaDisponivelRequisicao = new SetJobAvailableRequisicao(Operacoes.SET_JOB_AVAILABLE, token1, id26, available26);
+
+						String jsonRequisicaoSetVagaDisponivel = gson.toJson(setVagaDisponivelRequisicao);
+						System.out.println("Requisição enviada: " + jsonRequisicaoSetVagaDisponivel);
+						out.println(jsonRequisicaoSetVagaDisponivel);
+
+						SetJobAvailableResposta setVagaDisponivelResposta = gson.fromJson(in.readLine(), SetJobAvailableResposta.class);
+						String jsonRespostaSetVagaDisponivel = gson.toJson(setVagaDisponivelResposta);
+						System.out.println("Resposta recebida: " + jsonRespostaSetVagaDisponivel);
+
+						System.out.print("Nova opção: ");
+						
+					break;
+					
+        			case "27":
+        				
+        				System.out.print("Digite o id: ");
+        				String id27 = stdIn.readLine();
+        				
+        				System.out.print("Digite se é divulgável(YES/NO): ");
+        				String searchable27 = stdIn.readLine();
+
+						SetJobSearchableRequisicao setVagaDivulgavelRequisicao = new SetJobSearchableRequisicao(Operacoes.SET_JOB_SEARCHABLE, token1, id27, searchable27);
+
+						String jsonRequisicaoSetVagaDivulgavel = gson.toJson(setVagaDivulgavelRequisicao);
+						System.out.println("Requisição enviada: " + jsonRequisicaoSetVagaDivulgavel);
+						out.println(jsonRequisicaoSetVagaDivulgavel);
+
+						SetJobSearchableResposta setVagaDivulgavelResposta = gson.fromJson(in.readLine(), SetJobSearchableResposta.class);
+						String jsonRespostaSetVagaDivulgavel = gson.toJson(setVagaDivulgavelResposta);
+						System.out.println("Resposta recebida: " + jsonRespostaSetVagaDivulgavel);
+
+						System.out.print("Nova opção: ");
+						
+					break;
+					
+        			case "28":
+        				
+        				List<String> habilidades28 = new ArrayList<>();
+						System.out.println("Digite as habilidades (digite 'sair' para terminar):");
+						while (true) {
+							String habilidade = stdIn.readLine();
+							if (habilidade.equalsIgnoreCase("sair")) {
+								break;
+							}
+							habilidades28.add(habilidade);
+						}
+
+						SearchProfileRequisicao searchPerfilRequisicaoSkill = new SearchProfileRequisicao(Operacoes.SEARCH_CANDIDATE, token1, habilidades28);
+						
+						String jsonRequisicaoSearchPerfilSkill = gson.toJson(searchPerfilRequisicaoSkill);
+						System.out.println("Requisição enviada: " + jsonRequisicaoSearchPerfilSkill);
+						out.println(jsonRequisicaoSearchPerfilSkill);
+
+						SearchProfileResposta searchPerfilRespostaSkill = gson.fromJson(in.readLine(), SearchProfileResposta.class);
+						String jsonRespostaSearchPerfilSkill = gson.toJson(searchPerfilRespostaSkill);
+						System.out.println("Resposta recebida: " + jsonRespostaSearchPerfilSkill);
+						
+						List<Map<String, String>> perfisSkill = (List<Map<String, String>>) searchPerfilRespostaSkill.getData().get("profile");
+						ProfileWindow profileWindow28 = new ProfileWindow(perfisSkill);
+						profileWindow28.show();
+						
+						System.out.print("Nova opção: ");
+						
+						//profileWindow28.close();
+        				
+        			break;
+        			
+        			case "29":
+        				
+        				System.out.print("Digite a experiência: ");
+        				String experience29 = stdIn.readLine();
+        				
+        				SearchProfileRequisicao searchPerfilRequisicaoExperience = new SearchProfileRequisicao(Operacoes.SEARCH_CANDIDATE, token1, experience29);
+
+						String jsonRequisicaoSearchPerfilExperience = gson.toJson(searchPerfilRequisicaoExperience);
+						System.out.println("Requisição enviada: " + jsonRequisicaoSearchPerfilExperience);
+						out.println(jsonRequisicaoSearchPerfilExperience);
+
+						SearchProfileResposta searchPerfilRespostaExperience = gson.fromJson(in.readLine(), SearchProfileResposta.class);
+						String jsonRespostaSearchPerfilExperience = gson.toJson(searchPerfilRespostaExperience);
+						System.out.println("Resposta recebida: " + jsonRespostaSearchPerfilExperience);
+						
+						List<Map<String, String>> perfisExperience = (List<Map<String, String>>) searchPerfilRespostaExperience.getData().get("profile");
+						ProfileWindow profileWindow29 = new ProfileWindow(perfisExperience);
+						profileWindow29.show();
+						
+						System.out.print("Nova opção: ");
+					
+					break;
+					
+        			case "30":
+        				
+        				List<String> habilidades30 = new ArrayList<>();
+						System.out.println("Digite as habilidades (digite 'sair' para terminar):");
+						while (true) {
+							String habilidade = stdIn.readLine();
+							if (habilidade.equalsIgnoreCase("sair")) {
+								break;
+							}
+							habilidades30.add(habilidade);
+						}
+	
+						System.out.print("Digite a experiência: ");
+        				String experience30 = stdIn.readLine();
+        				
+        				System.out.print("Digite o filtro (E/OU): ");
+        				String filter30 = stdIn.readLine();
+
+						SearchProfileRequisicao searchPerfilRequisicaoFilter = new SearchProfileRequisicao(Operacoes.SEARCH_CANDIDATE, token1, habilidades30, experience30, filter30);
+
+						String jsonRequisicaoSearchPerfilFilter = gson.toJson(searchPerfilRequisicaoFilter);
+						System.out.println("Requisição enviada: " + jsonRequisicaoSearchPerfilFilter);
+						out.println(jsonRequisicaoSearchPerfilFilter);
+
+						SearchProfileResposta searchPerfilRespostaFilter = gson.fromJson(in.readLine(), SearchProfileResposta.class);
+						String jsonRespostaSearchPerfilFilter = gson.toJson(searchPerfilRespostaFilter);
+						System.out.println("Resposta recebida: " + jsonRespostaSearchPerfilFilter);
+
+						List<Map<String, String>> perfisFilter = (List<Map<String, String>>) searchPerfilRespostaFilter.getData().get("profile");
+						ProfileWindow profileWindow30 = new ProfileWindow(perfisFilter);
+						profileWindow30.show();
+
+						System.out.print("Nova opção: ");
+        				
+        			break;
+        			
+        			case "31":
+        				
+        				System.out.print("Digite o id: ");
+        				String id31 = stdIn.readLine();
+        				
+        				ChooseCandidateRequisicao chooseCandidatoRequisicao = new ChooseCandidateRequisicao(Operacoes.CHOOSE_CANDIDATE, token1, id31);
+            			
+        				String jsonRequisicaoCandidatoChoose = gson.toJson(chooseCandidatoRequisicao);
+        				System.out.println("Requisição enviada: " + jsonRequisicaoCandidatoChoose);
+        				out.println(jsonRequisicaoCandidatoChoose);
+                    
+        				ChooseCandidateResposta chooseCandidatoResposta = gson.fromJson(in.readLine(), ChooseCandidateResposta.class);
+        				String jsonRespostaCandidatoChoose = gson.toJson(chooseCandidatoResposta);
+        				System.out.println("Resposta recebida: " + jsonRespostaCandidatoChoose);
+        				
+        				System.out.print("Nova opção: ");
+        				
+        			break;
+        			
+        			case "32":
         				return;
         			
         			default:

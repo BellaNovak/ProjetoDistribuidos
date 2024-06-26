@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Map;
 
 import entities.Jobset;
 import entities.Recruiter;
@@ -13,18 +12,20 @@ import entities.Skill;
 
 public class JobsetDAOTeste {
 	
-public static void cadastrarJobsetTeste() throws SQLException, IOException {
+	public static void cadastrarJobsetTeste() throws SQLException, IOException {
 		
 		Skill skill = new Skill();
 		skill.setIdSkill(7);
 		
 		Recruiter recruiter = new Recruiter();
-		recruiter.setIdRecruiter(2);
+		recruiter.setIdRecruiter(1);
 		
 		Jobset jobset = new Jobset();
-		jobset.setExperience("Avançado");
+		jobset.setExperience("2");
 		jobset.setSkill(skill);
 		jobset.setRecruiter(recruiter);
+		jobset.setAvailable("yes");
+		jobset.setSearchable("no");
 		
 		Connection conn = BancoDados.conectar();
 		new JobsetDAO(conn).cadastrar(jobset);
@@ -58,11 +59,11 @@ public static void cadastrarJobsetTeste() throws SQLException, IOException {
 
 	public static void buscarEspecificaTeste() throws SQLException, IOException {
 
+		int idJobset = 4;
 		int idRecruiter = 1;
-		int idSkill = 10;
 
 		Connection conn = BancoDados.conectar();
-		Jobset jobset = new JobsetDAO(conn).buscarEspecifica(idRecruiter, idSkill);
+		Jobset jobset = new JobsetDAO(conn).buscarEspecifica(idJobset, idRecruiter);
 
 		if (jobset != null) {
 
@@ -74,25 +75,52 @@ public static void cadastrarJobsetTeste() throws SQLException, IOException {
 		}
 	}
 	
-	public static void atualizarJobsetTeste() throws SQLException, IOException, ParseException {
+	public static void atualizarDisponivelTeste() throws SQLException, IOException, ParseException {
 
-		String experience = "2";
-		int idRecruiter = 2;
-		int idSkill = 5;
+		String available = "yes";
+		int idJobset = 5;
+		int idRecruiter = 4;
 
 		Connection conn = BancoDados.conectar();
-		new JobsetDAO(conn).atualizar(experience, idRecruiter, idSkill);
+		new JobsetDAO(conn).atualizarDisponivel(available, idJobset, idRecruiter);
+
+		System.out.println("Dados atualizados com sucesso.");
+	}
+	
+	public static void atualizarDivulgavelTeste() throws SQLException, IOException, ParseException {
+
+		String searchable = "YES";
+		int idJobset = 8;
+		int idRecruiter = 1;
+
+		Connection conn = BancoDados.conectar();
+		new JobsetDAO(conn).atualizarDivulgavel(searchable, idJobset, idRecruiter);
+
+		System.out.println("Dados atualizados com sucesso.");
+	}
+	
+	public static void atualizarJobsetTeste() throws SQLException, IOException, ParseException {
+
+		int idSkill = 5;
+		String experience = "2";
+		String available = "yes";
+		String searchable = "no";
+		int idJobset = 5;
+		int idRecruiter = 2;
+
+		Connection conn = BancoDados.conectar();
+		new JobsetDAO(conn).atualizar(idSkill, experience, available, searchable, idJobset, idRecruiter);
 
 		System.out.println("Dados atualizados com sucesso.");
 	}
 
 	public static void excluirJobsetTeste() throws SQLException, IOException {
 
-		int idRecruiter = 1;
-		int idSkill = 5;
+		int idJobset = 2;
+		int idRecruiter = 3;
 
 		Connection conn = BancoDados.conectar();
-		int linhasManipuladas = new JobsetDAO(conn).excluir(idRecruiter, idSkill);
+		int linhasManipuladas = new JobsetDAO(conn).excluir(idJobset, idRecruiter);
 
 		if (linhasManipuladas > 0) {
 
@@ -110,9 +138,11 @@ public static void cadastrarJobsetTeste() throws SQLException, IOException {
 		try {
 			
 			//JobsetDAOTeste.cadastrarJobsetTeste();
-			JobsetDAOTeste.buscarTodosJobsetTeste();
+			//JobsetDAOTeste.buscarTodosJobsetTeste();
 			//JobsetDAOTeste.buscarPorRecruiterTeste();
 			//JobsetDAOTeste.buscarEspecificaTeste();
+			//JobsetDAOTeste.atualizarDisponivelTeste();
+			JobsetDAOTeste.atualizarDivulgavelTeste();
 			//JobsetDAOTeste.atualizarJobsetTeste();
 			//JobsetDAOTeste.excluirJobsetTeste();
 

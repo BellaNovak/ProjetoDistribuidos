@@ -5,14 +5,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Skillset {
+public class Choose {
 	
 	private int idSkillset;
-	private String experience;
 	private Candidate candidate;
-	private Skill skill;
+	private Recruiter recruiter;
 	
-	public Skillset() {
+	public Choose() {
 		
 	}
 
