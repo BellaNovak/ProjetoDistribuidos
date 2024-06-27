@@ -152,9 +152,10 @@ public class CandidateDAO {
         }
 
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("SELECT skillset.candidate_id, skillset.id_skillset, skillset.experience, skill.skill ")
+        queryBuilder.append("SELECT skillset.candidate_id, skillset.id_skillset, skillset.experience, skill.skill, candidate.name ")
                     .append("FROM skillset ")
                     .append("JOIN skill ON skillset.skill_id = skill.id_skill ")
+                    .append("JOIN candidate ON skillset.candidate_id = candidate.id_candidate ")
                     .append("WHERE skill.skill IN (");
 
         for (int i = 0; i < skills.size(); i++) {
@@ -180,6 +181,7 @@ public class CandidateDAO {
                     profileData.put("skill", rs.getString("skill"));
                     profileData.put("experience", rs.getString("experience"));
                     profileData.put("id_user", rs.getString("candidate_id"));
+                    profileData.put("name", rs.getString("name"));
                     profileList.add(profileData);
                 }
                 return profileList;
@@ -188,9 +190,10 @@ public class CandidateDAO {
     }
 	
 	public List<Map<String, String>> buscarPerfisPorExperiencia(int experience) throws SQLException {
-	    String query = "SELECT skillset.candidate_id, skillset.id_skillset, skillset.experience, skill.skill " +
+	    String query = "SELECT skillset.candidate_id, skillset.id_skillset, skillset.experience, skill.skill, candidate.name " +
 	                   "FROM skillset " +
 	                   "JOIN skill ON skillset.skill_id = skill.id_skill " +
+	                   "JOIN candidate ON skillset.candidate_id = candidate.id_candidate " +
 	                   "WHERE skillset.experience <= ?";
 
 	    try (PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -204,6 +207,7 @@ public class CandidateDAO {
                     profileData.put("skill", rs.getString("skill"));
                     profileData.put("experience", rs.getString("experience"));
                     profileData.put("id_user", rs.getString("candidate_id"));
+                    profileData.put("name", rs.getString("name"));
                     profileList.add(profileData);
 	            }
 	            return profileList;
@@ -217,9 +221,10 @@ public class CandidateDAO {
 	    }
 
 	    StringBuilder queryBuilder = new StringBuilder();
-	    queryBuilder.append("SELECT skillset.candidate_id, skillset.id_skillset, skillset.experience, skill.skill ")
+	    queryBuilder.append("SELECT skillset.candidate_id, skillset.id_skillset, skillset.experience, skill.skill, candidate.name ")
         			.append("FROM skillset ")
         			.append("JOIN skill ON skillset.skill_id = skill.id_skill ")
+        			.append("JOIN candidate ON skillset.candidate_id = candidate.id_candidate ")
 	                .append("WHERE skillset.experience <= ? ");
 
 	    if (filter.equalsIgnoreCase("AND")) {
@@ -252,6 +257,7 @@ public class CandidateDAO {
                     profileData.put("skill", rs.getString("skill"));
                     profileData.put("experience", rs.getString("experience"));
                     profileData.put("id_user", rs.getString("candidate_id"));
+                    profileData.put("name", rs.getString("name"));
                     profileList.add(profileData);
 	            }
 	            return profileList;

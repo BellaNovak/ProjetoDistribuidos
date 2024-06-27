@@ -244,48 +244,7 @@ public class Servidor extends Thread {
 						}
 									
 					break;
-					
-					case GET_COMPANY:
-						
-						GetCompanyRequisicao getCompania = gson.fromJson(json, GetCompanyRequisicao.class);
-						
-						System.out.println(getCompania.getToken());
-						
-						try{
 							
-							verifica.verify(getCompania.getToken());
-							Map<String, Claim> decoded = JWT.decode(getCompania.getToken()).getClaims();
-		                    int id28 = decoded.get("id").asInt();
-		                    
-							try {
-								
-								Connection conn28 = BancoDados.conectar();
-			                    ChooseDAO choose28 = new ChooseDAO(conn28);
-			                    List<Map<String, String>> companies = choose28.buscarEmpresasPorCandidato(id28);
-
-			                    GetCompanyResposta mensagemGetResposta = new GetCompanyResposta(getCompania.getOperation(), Status.SUCCESS, companies);
-			                    String jsonResposta28 = gson.toJson(mensagemGetResposta);
-			                    System.out.println("Resposta recebida: " + jsonResposta28);
-			                    out.println(jsonResposta28);
-			                    
-			                } catch (SQLException e) {
-			                    e.printStackTrace();
-			                    GetCompanyResposta mensagemGetResposta= new GetCompanyResposta(getCompania.getOperation(), Status.CANDIDATE_NOT_FOUND);
-			                    String jsonResposta28 = gson.toJson(mensagemGetResposta);
-			                    System.out.println("Resposta recebida: " + jsonResposta28);
-			                    out.println(jsonResposta28);
-			                }
-							
-						} catch(Exception e) {
-							
-							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(getCompania.getOperation(), Status.INVALID_TOKEN);
-							String jsonResposta28 = gson.toJson(mensagemTokenEnviada);
-							System.out.println(jsonResposta28);
-							out.println(jsonResposta28);
-						}
-						
-					break;	
-						
 					case LOGOUT_CANDIDATE:
 
 						LogoutCandidateRequisicao logoutCandidato = gson.fromJson(json,  LogoutCandidateRequisicao.class);
@@ -1367,15 +1326,10 @@ public class Servidor extends Thread {
 		                    String idJobset19 = data19.get("id");
 							String skill19 = data19.get("skill");
 							String experience19 = data19.get("experience");
-							String available19 = data19.get("available");
-							String searchable19 = data19.get("searchable");
 							
 							System.out.println(idJobset19);
 							System.out.println(skill19);
 							System.out.println(experience19);
-							System.out.println(available19);
-							System.out.println(searchable19);
-							
 							
 							Connection conn19 = BancoDados.conectar();
 							Skill skillNome19 = new SkillDAO(conn19).buscarPorNome(skill19);
@@ -1397,7 +1351,7 @@ public class Servidor extends Thread {
 									if(jobset19 != null) {
 										
 										Connection conn191919 = BancoDados.conectar();
-										new JobsetDAO(conn191919).atualizar(skillNome19.getIdSkill(), experience19, available19, searchable19, Integer.parseInt(idJobset19), id19);
+										new JobsetDAO(conn191919).atualizar(skillNome19.getIdSkill(), experience19, Integer.parseInt(idJobset19), id19);
 											
 										UpdateJobResposta mensagemUpdateEnviada = new UpdateJobResposta(updateVaga.getOperation(), Status.SUCCESS);
 										String jsonResposta19 = gson.toJson(mensagemUpdateEnviada);
@@ -1838,6 +1792,47 @@ public class Servidor extends Thread {
 							String jsonResposta27 = gson.toJson(mensagemTokenEnviada);
 							System.out.println(jsonResposta27);
 							out.println(jsonResposta27);
+						}
+						
+					break;
+					
+					case GET_COMPANY:
+						
+						GetCompanyRequisicao getCompania = gson.fromJson(json, GetCompanyRequisicao.class);
+						
+						System.out.println(getCompania.getToken());
+						
+						try{
+							
+							verifica.verify(getCompania.getToken());
+							Map<String, Claim> decoded = JWT.decode(getCompania.getToken()).getClaims();
+							int id28 = decoded.get("id").asInt();
+		                    
+							try {
+								
+								Connection conn28 = BancoDados.conectar();
+			                    ChooseDAO choose28 = new ChooseDAO(conn28);
+			                    List<Map<String, String>> companies = choose28.buscarEmpresasPorCandidato(id28);
+
+			                    GetCompanyResposta mensagemGetResposta = new GetCompanyResposta(getCompania.getOperation(), Status.SUCCESS, companies);
+			                    String jsonResposta28 = gson.toJson(mensagemGetResposta);
+			                    System.out.println("Resposta recebida: " + jsonResposta28);
+			                    out.println(jsonResposta28);
+			                    
+			                } catch (SQLException e) {
+			                    e.printStackTrace();
+			                    GetCompanyResposta mensagemGetResposta= new GetCompanyResposta(getCompania.getOperation(), Status.CANDIDATE_NOT_FOUND);
+			                    String jsonResposta28 = gson.toJson(mensagemGetResposta);
+			                    System.out.println("Resposta recebida: " + jsonResposta28);
+			                    out.println(jsonResposta28);
+			                }
+							
+						} catch(Exception e) {
+							
+							RespostaInvalida mensagemTokenEnviada = new RespostaInvalida(getCompania.getOperation(), Status.INVALID_TOKEN);
+							String jsonResposta28 = gson.toJson(mensagemTokenEnviada);
+							System.out.println(jsonResposta28);
+							out.println(jsonResposta28);
 						}
 						
 					break;	

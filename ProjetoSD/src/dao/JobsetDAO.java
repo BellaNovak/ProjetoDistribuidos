@@ -142,7 +142,7 @@ public class JobsetDAO {
 
 		try {
 
-			String sql = "SELECT skill.skill, jobset.experience, jobset.skill_id, jobset.id_jobset " +
+			String sql = "SELECT skill.skill, jobset.experience, jobset.skill_id, jobset.id_jobset, jobset.available, jobset.searchable " +
                      "FROM jobset " +
                      "JOIN skill ON jobset.skill_id = skill.id_skill " +
                      "WHERE jobset.recruiter_id = ? ";
@@ -158,6 +158,8 @@ public class JobsetDAO {
 				job.put("skill", rs.getString("skill"));
 				job.put("experience", rs.getString("experience"));
 				job.put("id", String.valueOf(rs.getInt("id_jobset")));
+				job.put("available", rs.getString("available"));
+				job.put("searchable", rs.getString("searchable"));
 				jobs.add(job);
 			}
 
@@ -178,7 +180,7 @@ public class JobsetDAO {
 	    }
 
 	    StringBuilder queryBuilder = new StringBuilder();
-	    queryBuilder.append("SELECT jobset.recruiter_id, jobset.experience, skill.skill ")
+	    queryBuilder.append("SELECT jobset.recruiter_id, jobset.experience, skill.skill, jobset.available ")
 	                .append("FROM jobset ")
 	                .append("JOIN skill ON jobset.skill_id = skill.id_skill ")
 	                .append("WHERE jobset.searchable = 'YES' AND skill.skill IN (");
@@ -205,6 +207,7 @@ public class JobsetDAO {
 	                jobData.put("id", rs.getString("recruiter_id"));
 	                jobData.put("experience", rs.getString("experience"));
 	                jobData.put("skill", rs.getString("skill"));
+					jobData.put("available", rs.getString("available"));
 	                jobList.add(jobData);
 	            }
 	            return jobList;
@@ -213,7 +216,7 @@ public class JobsetDAO {
 	}
 	
 	public List<Map<String, String>> buscarEmpregosPorExperiencia(int experience) throws SQLException {
-	    String query = "SELECT jobset.recruiter_id, jobset.experience, skill.skill " +
+	    String query = "SELECT jobset.recruiter_id, jobset.experience, skill.skill, jobset.available " +
 	                   "FROM jobset " +
 	                   "JOIN skill ON jobset.skill_id = skill.id_skill " +
 	                   "WHERE jobset.experience <= ? AND jobset.searchable = 'YES'";
@@ -228,6 +231,7 @@ public class JobsetDAO {
 	                jobData.put("id", rs.getString("recruiter_id"));
 	                jobData.put("experience", rs.getString("experience"));
 	                jobData.put("skill", rs.getString("skill"));
+					jobData.put("available", rs.getString("available"));
 	                jobList.add(jobData);
 	            }
 	            return jobList;
@@ -241,7 +245,7 @@ public class JobsetDAO {
 	    }
 
 	    StringBuilder queryBuilder = new StringBuilder();
-	    queryBuilder.append("SELECT jobset.recruiter_id, jobset.experience, skill.skill ")
+	    queryBuilder.append("SELECT jobset.recruiter_id, jobset.experience, skill.skill, jobset.available ")
 	                .append("FROM jobset ")
 	                .append("JOIN skill ON jobset.skill_id = skill.id_skill ")
 	                .append("WHERE jobset.searchable = 'YES' ")
@@ -276,6 +280,7 @@ public class JobsetDAO {
 	                jobData.put("id", rs.getString("recruiter_id"));
 	                jobData.put("experience", rs.getString("experience"));
 	                jobData.put("skill", rs.getString("skill"));
+					jobData.put("available", rs.getString("available"));
 	                jobList.add(jobData);
 	            }
 	            return jobList;
@@ -370,20 +375,18 @@ public class JobsetDAO {
 		}
 	}
 	
-	public void atualizar(int idSkill, String experience, String available, String searchable, int idJobset, int idRecruiter) throws SQLException {
+	public void atualizar(int idSkill, String experience, int idJobset, int idRecruiter) throws SQLException {
 
 		PreparedStatement st = null;
 
 		try {
 
-			st = conn.prepareStatement("update jobset set skill_id = ?, experience = ?, available = ?, searchable = ? where id_jobset = ? and recruiter_id = ?");
+			st = conn.prepareStatement("update jobset set skill_id = ?, experience = ? where id_jobset = ? and recruiter_id = ?");
 		
 			st.setInt(1, idSkill);
 			st.setString(2, experience);
-			st.setString(3, available);
-			st.setString(4, searchable);
-			st.setInt(5, idJobset);
-			st.setInt(6, idRecruiter);
+			st.setInt(3, idJobset);
+			st.setInt(4, idRecruiter);
 
 			st.executeUpdate();
 

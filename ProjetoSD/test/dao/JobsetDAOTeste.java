@@ -103,13 +103,11 @@ public class JobsetDAOTeste {
 
 		int idSkill = 5;
 		String experience = "2";
-		String available = "yes";
-		String searchable = "no";
 		int idJobset = 5;
 		int idRecruiter = 2;
 
 		Connection conn = BancoDados.conectar();
-		new JobsetDAO(conn).atualizar(idSkill, experience, available, searchable, idJobset, idRecruiter);
+		new JobsetDAO(conn).atualizar(idSkill, experience, idJobset, idRecruiter);
 
 		System.out.println("Dados atualizados com sucesso.");
 	}

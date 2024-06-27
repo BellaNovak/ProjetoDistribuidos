@@ -39,7 +39,7 @@ public class ChooseWindow {
     private void initialize() {
     	
         frame = new JFrame();
-        frame.setTitle("Lista de vagas");
+        frame.setTitle("Lista de empresas para entrar em contato");
         frame.setBounds(100, 100, 600, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));

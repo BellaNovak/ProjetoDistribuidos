@@ -44,7 +44,7 @@ public class JobWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
-        tableModel = new DefaultTableModel(new Object[]{"ID Empresa", "Habilidade", "Experiência"}, 0);
+        tableModel = new DefaultTableModel(new Object[]{"ID Empresa", "Habilidade", "Experiência", "Disponível"}, 0);
         resultTable = new JTable(tableModel);
         frame.getContentPane().add(new JScrollPane(resultTable), BorderLayout.CENTER);
 
@@ -70,6 +70,7 @@ public class JobWindow {
                         job.get("id"),
                         job.get("skill"),
                         job.get("experience"),
+                        job.get("available"),
                 });
             }
         }

@@ -14,14 +14,23 @@ import com.google.gson.GsonBuilder;
 import enumerations.Operacoes;
 import gui.ChooseWindow;
 import gui.ConexaoWindow;
+import gui.IncludeJobWindow;
+import gui.IncludeSkillWindow;
 import gui.JobWindow;
+import gui.JobsetWindow;
 import gui.LoginCandidateWindow;
+import gui.LoginRecruiterWindow;
 import gui.OpcaoAreaWindow;
 import gui.OpcoesCandidateWindow;
 import gui.OpcoesRecruiterWindow;
 import gui.ProfileWindow;
+import gui.SetAvailableWindow;
+import gui.SetSearchableWindow;
 import gui.SignUpCandidateWindow;
+import gui.SignUpRecruiterWindow;
+import gui.SkillsetWindow;
 import gui.UpdateCandidateWindow;
+import gui.UpdateRecruiterWindow;
 import operacoes.ChooseCandidateRequisicao;
 import operacoes.ChooseCandidateResposta;
 import operacoes.DeleteCandidateRequisicao;
@@ -85,7 +94,7 @@ public class Cliente {
 	
 	public static void main(String[] args) throws IOException, SQLException {
         
-		/*ConexaoWindow conexao = new ConexaoWindow();
+		ConexaoWindow conexao = new ConexaoWindow();
         conexao.setVisible(true);
         
         String serverHost = null;
@@ -100,10 +109,10 @@ public class Cliente {
             }
         }
         
-        int serverPort = Integer.parseInt(porta);*/
+        int serverPort = Integer.parseInt(porta);
 		
-		InetAddress serverHost = InetAddress.getLocalHost();
-		int serverPort = 21234;
+		//InetAddress serverHost = InetAddress.getLocalHost();
+		//int serverPort = 21234;
 		
 		/*System.out.println("Qual o IP do servidor?");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -205,13 +214,13 @@ public class Cliente {
         		switch(userInput){
         			case "1":
         				
-        				System.out.print("Digite o email: ");
+        				/*System.out.print("Digite o email: ");
         				String email1 = stdIn.readLine();
                 	
         				System.out.print("Digite a senha: ");
-        				String password1 = stdIn.readLine();
+        				String password1 = stdIn.readLine();*/
         				
-        				/*LoginCandidateWindow loginCandidatoWindow = new LoginCandidateWindow();
+        				LoginCandidateWindow loginCandidatoWindow = new LoginCandidateWindow();
         		        loginCandidatoWindow.setVisible(true);
         				
         				String email1 = null;
@@ -224,7 +233,7 @@ public class Cliente {
         		            } catch (InterruptedException e) {
         		                e.printStackTrace();
         		            }
-        		        }*/
+        		        }
         				
         				LoginCandidateRequisicao loginCandidatoRequisicao = new LoginCandidateRequisicao(Operacoes.LOGIN_CANDIDATE, email1, password1);
         				
@@ -339,16 +348,16 @@ public class Cliente {
                 
         			case "3":
         				
-        				System.out.print("Digite o email: ");
+        				/*System.out.print("Digite o email: ");
         				String email3 = stdIn.readLine();
                 	
         				System.out.print("Digite a senha: ");
         				String password3 = stdIn.readLine();
                 	
         				System.out.print("Digite o nome: ");
-        				String name3 = stdIn.readLine();
+        				String name3 = stdIn.readLine();*/
         				
-        				/*SignUpCandidateWindow signUpCandidatoWindow = new SignUpCandidateWindow();
+        				SignUpCandidateWindow signUpCandidatoWindow = new SignUpCandidateWindow();
         		        signUpCandidatoWindow.setVisible(true);
         				
         				String email3 = null;
@@ -363,7 +372,7 @@ public class Cliente {
         		            } catch (InterruptedException e) {
         		                e.printStackTrace();
         		            }
-        		        }*/
+        		        }
                 	
         				SignUpCandidateRequisicao signUpCandidatoRequisicao = new SignUpCandidateRequisicao(Operacoes.SIGNUP_CANDIDATE, email3, password3, name3);
         			
@@ -425,16 +434,16 @@ public class Cliente {
                  
         			case "5":
         				
-        				System.out.print("Digite o email: ");
+        				/*System.out.print("Digite o email: ");
         				String email5 = stdIn.readLine();
                 	
         				System.out.print("Digite a senha: ");
         				String password5 = stdIn.readLine();
                 	
         				System.out.print("Digite o nome: ");
-        				String name5 = stdIn.readLine();
+        				String name5 = stdIn.readLine();*/
         				
-        				/*UpdateCandidateWindow updateCandidatoWindow = new UpdateCandidateWindow();
+        				UpdateCandidateWindow updateCandidatoWindow = new UpdateCandidateWindow();
         		        updateCandidatoWindow.setVisible(true);
         				
         				String email5 = null;
@@ -449,7 +458,7 @@ public class Cliente {
         		            } catch (InterruptedException e) {
         		                e.printStackTrace();
         		            }
-        		        }*/
+        		        }
                 	
         				UpdateCandidateRequisicao updateCandidatoRequisicao = new UpdateCandidateRequisicao(Operacoes.UPDATE_ACCOUNT_CANDIDATE, token, email5, password5, name5);
         			
@@ -513,13 +522,13 @@ public class Cliente {
         			
         			case "7":
         				
-        				System.out.print("Digite o email: ");
+        				/*System.out.print("Digite o email: ");
         				String email7 = stdIn.readLine();
                 	
         				System.out.print("Digite a senha: ");
-        				String password7 = stdIn.readLine();
+        				String password7 = stdIn.readLine();*/
         				
-        				/*LoginRecruiterWindow loginEmpresaWindow = new LoginRecruiterWindow();
+        				LoginRecruiterWindow loginEmpresaWindow = new LoginRecruiterWindow();
         		        loginEmpresaWindow.setVisible(true);
         				
         				String email7 = null;
@@ -532,7 +541,7 @@ public class Cliente {
         		            } catch (InterruptedException e) {
         		                e.printStackTrace();
         		            }
-        		        }*/
+        		        }
         				
         				LoginRecruiterRequisicao loginEmpresaRequisicao = new LoginRecruiterRequisicao(Operacoes.LOGIN_RECRUITER, email7, password7);
         				
@@ -629,7 +638,7 @@ public class Cliente {
         			
         			case "9":
         				
-        				System.out.print("Digite o email: ");
+        				/*System.out.print("Digite o email: ");
         				String email9 = stdIn.readLine();
                 	
         				System.out.print("Digite a senha: ");
@@ -642,9 +651,9 @@ public class Cliente {
         				String industry9 = stdIn.readLine();
         				
         				System.out.print("Digite a descrição: ");
-        				String description9 = stdIn.readLine();
+        				String description9 = stdIn.readLine();*/
         				
-        				/*SignUpRecruiterWindow signUpEmpresaWindow = new SignUpRecruiterWindow();
+        				SignUpRecruiterWindow signUpEmpresaWindow = new SignUpRecruiterWindow();
         		        signUpEmpresaWindow.setVisible(true);
         				
         				String email9 = null;
@@ -657,13 +666,13 @@ public class Cliente {
         		            password9 = signUpEmpresaWindow.getPassword();
         		            name9 = signUpEmpresaWindow.getName();
         		            industry9 = signUpEmpresaWindow.getIndustry();
-        		            description9 = signUpEmpresaWindow.gerDescription();
+        		            description9 = signUpEmpresaWindow.getDescription();
         		            try {
         		                Thread.sleep(100); 
         		            } catch (InterruptedException e) {
         		                e.printStackTrace();
         		            }
-        		        }*/
+        		        }
                 	
         				SignUpRecruiterRequisicao signUpEmpresaRequisicao = new SignUpRecruiterRequisicao(Operacoes.SIGNUP_RECRUITER, email9, password9, name9, industry9, description9);
         			
@@ -727,7 +736,7 @@ public class Cliente {
         			
         			case "11":
         				
-        				System.out.print("Digite o email: ");
+        				/*System.out.print("Digite o email: ");
         				String email11 = stdIn.readLine();
                 	
         				System.out.print("Digite a senha: ");
@@ -740,9 +749,9 @@ public class Cliente {
         				String industry11 = stdIn.readLine();
         				
         				System.out.print("Digite a descrição: ");
-        				String description11 = stdIn.readLine();
+        				String description11 = stdIn.readLine();*/
         				
-        				/*UpdateRecruiterWindow updateEmpresaWindow = new UpdateRecruiterWindow();
+        				UpdateRecruiterWindow updateEmpresaWindow = new UpdateRecruiterWindow();
         		        updateEmpresaWindow.setVisible(true);
         				
         				String email11 = null;
@@ -754,14 +763,14 @@ public class Cliente {
         		            email11 = updateEmpresaWindow.getEmail();
         		            password11 = updateEmpresaWindow.getPassword();
         		            name11 = updateEmpresaWindow.getName();
-        		            industry11 = updateUpEmpresaWindow.getIndustry();
-        		            description11 = updateEmpresaWindow.gerDescription();
+        		            industry11 = updateEmpresaWindow.getIndustry();
+        		            description11 = updateEmpresaWindow.getDescription();
         		            try {
         		                Thread.sleep(100); 
         		            } catch (InterruptedException e) {
         		                e.printStackTrace();
         		            }
-        		        }*/
+        		        }
                 	
         				UpdateRecruiterRequisicao updateEmpresaRequisicao = new UpdateRecruiterRequisicao(Operacoes.UPDATE_ACCOUNT_RECRUITER, token1, email11, password11, name11, industry11, description11);
         			
@@ -826,11 +835,26 @@ public class Cliente {
         			
         			case "13":
         				
-        				System.out.print("Digite a competência: ");
+        				/*System.out.print("Digite a competência: ");
         				String skill13 = stdIn.readLine();
                 	
         				System.out.print("Digite a experiência: ");
-        				String experience13 = stdIn.readLine();
+        				String experience13 = stdIn.readLine();*/
+        				
+        				IncludeSkillWindow includeCompetenciaWindow = new IncludeSkillWindow();
+        				includeCompetenciaWindow.setVisible(true);
+        				
+        				String skill13 = null;
+        				String experience13 = null;
+        		        while (skill13 == null && experience13 == null) {
+        		        	skill13 = includeCompetenciaWindow.getSkill();
+        		        	experience13 = includeCompetenciaWindow.getExperience();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
         				
         				IncludeSkillRequisicao includeCompetenciaRequisicao = new IncludeSkillRequisicao(Operacoes.INCLUDE_SKILL, token, skill13, experience13);
             			
@@ -912,7 +936,7 @@ public class Cliente {
         				
         			case "17":
         				
-        				System.out.print("Digite a competência: ");
+        				/*System.out.print("Digite a competência: ");
         				String skill17 = stdIn.readLine();
                 	
         				System.out.print("Digite a experiência: ");
@@ -922,7 +946,26 @@ public class Cliente {
         				String available17 = stdIn.readLine();
         				
         				System.out.print("Digite se é divulgável: ");
-        				String searchable17 = stdIn.readLine();
+        				String searchable17 = stdIn.readLine();*/
+        				
+        				IncludeJobWindow includeVagaWindow = new IncludeJobWindow();
+        				includeVagaWindow.setVisible(true);
+        				
+        				String skill17 = null;
+        				String experience17 = null;
+        				String available17 = null;
+        				String searchable17 = null;
+        		        while (skill17 == null && experience17 == null && available17 == null && searchable17 == null) {
+        		        	skill17 = includeVagaWindow.getSkill();
+        		        	experience17 = includeVagaWindow.getExperience();
+        		        	available17 = includeVagaWindow.getAvailable();
+        		        	searchable17 = includeVagaWindow.getSearchable();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
         				
         				IncludeJobRequisicao includeVagaRequisicao = new IncludeJobRequisicao(Operacoes.INCLUDE_JOB, token1, skill17, experience17, available17, searchable17);
             			
@@ -968,13 +1011,7 @@ public class Cliente {
         				System.out.print("Digite a experiência: ");
         				String experience19 = stdIn.readLine();
         				
-        				System.out.print("Digite se está disponível: ");
-        				String available19 = stdIn.readLine();
-        				
-        				System.out.print("Digite se é divulgável: ");
-        				String searchable19 = stdIn.readLine();
-        				
-        				UpdateJobRequisicao updateVagaRequisicao = new UpdateJobRequisicao(Operacoes.UPDATE_JOB, token1, id19, skill19, experience19, available19, searchable19);
+        				UpdateJobRequisicao updateVagaRequisicao = new UpdateJobRequisicao(Operacoes.UPDATE_JOB, token1, id19, skill19, experience19);
             			
         				String jsonRequisicaoVagaUpdate = gson.toJson(updateVagaRequisicao);
         				System.out.println("Requisição enviada: " + jsonRequisicaoVagaUpdate);
@@ -1019,6 +1056,10 @@ public class Cliente {
         				String jsonRespostaSkillsetLookUp = gson.toJson(lookUpSkillsetResposta);
         				System.out.println("Resposta recebida: " + jsonRespostaSkillsetLookUp);
         				
+        				List<Map<String, String>> skills = (List<Map<String, String>>) lookUpSkillsetResposta.getData().get("skillset");
+						SkillsetWindow skillsetWindow21 = new SkillsetWindow(skills);
+						skillsetWindow21.show();
+        				
         				System.out.print("Nova opção: ");
         			
         			break;
@@ -1034,6 +1075,10 @@ public class Cliente {
         				LookUpJobsetResposta lookUpJobsetResposta = gson.fromJson(in.readLine(), LookUpJobsetResposta.class);
         				String jsonRespostaJobsetLookUp = gson.toJson(lookUpJobsetResposta);
         				System.out.println("Resposta recebida: " + jsonRespostaJobsetLookUp);
+        				
+        				List<Map<String, String>> jobset = (List<Map<String, String>>) lookUpJobsetResposta.getData().get("jobset");
+						JobsetWindow jobsetWindow22 = new JobsetWindow(jobset);
+						jobsetWindow22.show();
         				
         				System.out.print("Nova opção: ");
         			
@@ -1137,11 +1182,26 @@ public class Cliente {
         			
         			case "26":
         				
-        				System.out.print("Digite o id: ");
+        				/*System.out.print("Digite o id: ");
         				String id26 = stdIn.readLine();
         				
         				System.out.print("Digite se está disponível(YES/NO): ");
-        				String available26 = stdIn.readLine();
+        				String available26 = stdIn.readLine();*/
+        				
+        				SetAvailableWindow setDisponivelWindow = new SetAvailableWindow();
+        				setDisponivelWindow.setVisible(true);
+        				
+        				String id26 = null;
+        				String available26 = null;
+        		        while (id26 == null && available26 == null) {
+        		        	id26 = setDisponivelWindow.getId();
+        		        	available26 = setDisponivelWindow.getAvailable();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
 
 						SetJobAvailableRequisicao setVagaDisponivelRequisicao = new SetJobAvailableRequisicao(Operacoes.SET_JOB_AVAILABLE, token1, id26, available26);
 
@@ -1159,11 +1219,26 @@ public class Cliente {
 					
         			case "27":
         				
-        				System.out.print("Digite o id: ");
+        				/*System.out.print("Digite o id: ");
         				String id27 = stdIn.readLine();
         				
         				System.out.print("Digite se é divulgável(YES/NO): ");
-        				String searchable27 = stdIn.readLine();
+        				String searchable27 = stdIn.readLine();*/
+        				
+        				SetSearchableWindow setDivulgavelWindow = new SetSearchableWindow();
+        				setDivulgavelWindow.setVisible(true);
+        				
+        				String id27 = null;
+        				String searchable27 = null;
+        		        while (id27 == null && searchable27 == null) {
+        		        	id27 = setDivulgavelWindow.getId();
+        		        	searchable27 = setDivulgavelWindow.getAvailable();
+        		            try {
+        		                Thread.sleep(100); 
+        		            } catch (InterruptedException e) {
+        		                e.printStackTrace();
+        		            }
+        		        }
 
 						SetJobSearchableRequisicao setVagaDivulgavelRequisicao = new SetJobSearchableRequisicao(Operacoes.SET_JOB_SEARCHABLE, token1, id27, searchable27);
 

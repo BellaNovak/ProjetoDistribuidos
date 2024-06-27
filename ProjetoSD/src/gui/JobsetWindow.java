@@ -1,22 +1,28 @@
 package gui;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
-public class ProfileWindow {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
-    private JFrame frame;
+public class JobsetWindow {
+	
+	private JFrame frame;
     private JTable resultTable;
     private DefaultTableModel tableModel;
-    private List<Map<String, String>> perfis;
+    private List<Map<String, String>> vagas;
 
-    public ProfileWindow(List<Map<String, String>> perfis) {
-        this.perfis = perfis;
+    public JobsetWindow(List<Map<String, String>> vagas) {
+        this.vagas = vagas;
         initialize();
     }
 
@@ -33,16 +39,16 @@ public class ProfileWindow {
     private void initialize() {
     	
         frame = new JFrame();
-        frame.setTitle("Lista de candidatos");
+        frame.setTitle("Vagas da empresa");
         frame.setBounds(100, 100, 600, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
-        tableModel = new DefaultTableModel(new Object[]{"ID", "Habilidade", "Experiência", "ID Usuário", "Nome"}, 0);
+        tableModel = new DefaultTableModel(new Object[]{"Habilidade", "Experiência", "ID vaga", "Disponível", "Divulgável"}, 0);
         resultTable = new JTable(tableModel);
         frame.getContentPane().add(new JScrollPane(resultTable), BorderLayout.CENTER);
 
-        displayProfiles();
+        displayJobs();
         
         JPanel buttonPanel = new JPanel();
         JButton okButton = new JButton("OK");
@@ -56,19 +62,19 @@ public class ProfileWindow {
         frame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private void displayProfiles() {
+    private void displayJobs() {
         tableModel.setRowCount(0);
-        if (perfis != null) {
-            for (Map<String, String> profile : perfis) {
+        if (vagas != null) {
+            for (Map<String, String> job : vagas) {
                 tableModel.addRow(new Object[]{
-                        profile.get("id"),
-                        profile.get("skill"),
-                        profile.get("experience"),
-                        profile.get("id_user"),
-                        profile.get("name"),
+                        job.get("skill"),
+                        job.get("experience"),
+                        job.get("id"),
+                        job.get("available"),
+                        job.get("searchable"),
                 });
             }
         }
     }
-    
+
 }
