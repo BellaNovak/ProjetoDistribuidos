@@ -1249,18 +1249,15 @@ public class Servidor extends Thread {
 							
 							verifica.verify(lookUpVaga.getToken());
 							Map<String, Claim> decoded = JWT.decode(lookUpVaga.getToken()).getClaims();
-		                    int id18 = decoded.get("id").asInt();
+		                    int idRecruiter18 = decoded.get("id").asInt();
 		                    
 		                    TreeMap<String, String> data18 = (TreeMap<String,String>) lookUpVaga.getData();
 							
-							String idSkill18 = data18.get("id");
+							String idJobset18 = data18.get("id");
 							
-							System.out.println(idSkill18);
+							System.out.println(idJobset18);
 							
-							Connection conn18 = BancoDados.conectar();
-							Skill idSkillBusca18 = new SkillDAO(conn18).buscarPorCodigo(Integer.parseInt(idSkill18));
-							
-							if(idSkill18.trim().equals("")) {
+							if(idJobset18.trim().equals("")) {
 								
 								RespostaInvalida mensagemNulaEnviada = new RespostaInvalida(lookUpVaga.getOperation(), Status.INVALID_FIELD);
 								String jsonResposta18 = gson.toJson(mensagemNulaEnviada);
@@ -1269,34 +1266,24 @@ public class Servidor extends Thread {
 								
 							} else {
 								
-								if (idSkillBusca18 != null) {
+								Connection conn1818 = BancoDados.conectar();
+								Jobset jobset18 = new JobsetDAO(conn1818).buscarEspecifica(Integer.parseInt(idJobset18), idRecruiter18);
 									
-									Connection conn1818 = BancoDados.conectar();
-									Jobset jobset18 = new JobsetDAO(conn1818).buscarEspecifica(id18, Integer.parseInt(idSkill18));
-									
-									if(jobset18 != null)
-									{
-										LookUpJobResposta mensagemLookUpEnviada = new LookUpJobResposta(lookUpVaga.getOperation(), Status.SUCCESS, idSkillBusca18.getSkill(), jobset18.getExperience(),idSkill18);
-										String jsonResposta18 = gson.toJson(mensagemLookUpEnviada);
-										System.out.println(jsonResposta18);
-										out.println(jsonResposta18);
-										
-									} else {
-										
-										LookUpJobResposta mensagemLookUpEnviada = new LookUpJobResposta(lookUpVaga.getOperation(), Status.JOB_NOT_FOUND);
-										String jsonResposta18 = gson.toJson(mensagemLookUpEnviada);
-										System.out.println(jsonResposta18);
-										out.println(jsonResposta18);
-										
-									}
-				        				
-								} else {
-									LookUpJobResposta mensagemLookUpEnviada = new LookUpJobResposta(lookUpVaga.getOperation(), Status.SKILL_NOT_EXISTS);
+								if(jobset18 != null)
+								{
+									LookUpJobResposta mensagemLookUpEnviada = new LookUpJobResposta(lookUpVaga.getOperation(), Status.SUCCESS, Integer.toString(jobset18.getSkill().getIdSkill()), jobset18.getExperience(), idJobset18, jobset18.getAvailable(), jobset18.getSearchable());
 									String jsonResposta18 = gson.toJson(mensagemLookUpEnviada);
 									System.out.println(jsonResposta18);
 									out.println(jsonResposta18);
-								}
-								
+										
+								} else {
+										
+									LookUpJobResposta mensagemLookUpEnviada = new LookUpJobResposta(lookUpVaga.getOperation(), Status.JOB_NOT_FOUND);
+									String jsonResposta18 = gson.toJson(mensagemLookUpEnviada);
+									System.out.println(jsonResposta18);
+									out.println(jsonResposta18);
+										
+								}	
 							}
 							
 						} catch(Exception e) {

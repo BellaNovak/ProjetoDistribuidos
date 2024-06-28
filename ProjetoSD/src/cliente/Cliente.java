@@ -996,6 +996,7 @@ public class Cliente {
         				String jsonRespostaVagaLookUp = gson.toJson(lookUpVagaResposta);
         				System.out.println("Resposta recebida: " + jsonRespostaVagaLookUp);
         				
+        		
         				System.out.print("Nova opção: ");
         				
         			break;

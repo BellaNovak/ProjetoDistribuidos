@@ -59,15 +59,15 @@ public class JobsetDAOTeste {
 
 	public static void buscarEspecificaTeste() throws SQLException, IOException {
 
-		int idJobset = 4;
-		int idRecruiter = 1;
+		int idJobset = 1;
+		int idRecruiter = 2;
 
 		Connection conn = BancoDados.conectar();
 		Jobset jobset = new JobsetDAO(conn).buscarEspecifica(idJobset, idRecruiter);
 
 		if (jobset != null) {
 
-			System.out.println(jobset.getRecruiter().getIdRecruiter() + " - " + jobset.getSkill().getIdSkill() + " - " + jobset.getExperience());
+			System.out.println(jobset.getSkill().getIdSkill() + " - " + jobset.getExperience() + " - " + jobset.getRecruiter().getIdRecruiter());
 
 		} else {
 
@@ -138,9 +138,9 @@ public class JobsetDAOTeste {
 			//JobsetDAOTeste.cadastrarJobsetTeste();
 			//JobsetDAOTeste.buscarTodosJobsetTeste();
 			//JobsetDAOTeste.buscarPorRecruiterTeste();
-			//JobsetDAOTeste.buscarEspecificaTeste();
+			JobsetDAOTeste.buscarEspecificaTeste();
 			//JobsetDAOTeste.atualizarDisponivelTeste();
-			JobsetDAOTeste.atualizarDivulgavelTeste();
+			//JobsetDAOTeste.atualizarDivulgavelTeste();
 			//JobsetDAOTeste.atualizarJobsetTeste();
 			//JobsetDAOTeste.excluirJobsetTeste();
 
